@@ -3,6 +3,7 @@ package rede.social.nester.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import rede.social.nester.converts.UsuarioConvert;
@@ -22,8 +23,8 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @PostMapping
-    public UsuarioOutput cadastrarUsuario(UsuarioInput usuarioInput){
+    @PostMapping("/cadastrar")
+    public UsuarioOutput cadastrarUsuario(@RequestBody UsuarioInput usuarioInput){
         UsuarioEntity usuarioEntity = usuarioConvert.inputToEntity(usuarioInput);
         UsuarioEntity usuarioCadastrado = usuarioService.cadastrarUsuario(usuarioEntity);
         UsuarioOutput usuarioOutput = usuarioConvert.entityToOutput(usuarioCadastrado);
