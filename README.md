@@ -39,4 +39,3 @@ Repositório no GitHub:
 
 ---
 
-## ⚙️ Instalação & Execução
