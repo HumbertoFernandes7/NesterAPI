@@ -2,16 +2,14 @@ package rede.social.nester.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rede.social.nester.converts.UsuarioConvert;
 import rede.social.nester.dtos.inputs.UsuarioInput;
 import rede.social.nester.dtos.outputs.UsuarioOutput;
 import rede.social.nester.entities.UsuarioEntity;
-import rede.social.nester.repositories.UsuarioRepository;
 import rede.social.nester.services.UsuarioService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -30,4 +28,18 @@ public class UsuarioController {
         UsuarioOutput usuarioOutput = usuarioConvert.entityToOutput(usuarioCadastrado);
         return usuarioOutput;
     }
+
+    @DeleteMapping("/remover/{id}")
+    public void removerUsuario(@PathVariable Long id){
+        UsuarioEntity usuarioEncontrado= usuarioService.buscaUsuarioPorId(id);
+        usuarioService.removerUsuario(usuarioEncontrado);
+    }
+
+    @GetMapping("/lista-todos")
+    public List<UsuarioOutput> listarUsuarios(){
+       List<UsuarioEntity> listaDeUsuarios = usuarioService.listarUsuarios();
+       List<UsuarioOutput> usuarioOutputs = usuarioConvert.listEntityToListOutput(listaDeUsuarios);
+       return usuarioOutputs;
+    }
+    
 }
