@@ -7,6 +7,9 @@ import rede.social.nester.dtos.inputs.UsuarioInput;
 import rede.social.nester.dtos.outputs.UsuarioOutput;
 import rede.social.nester.entities.UsuarioEntity;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class UsuarioConvert {
 
@@ -19,5 +22,9 @@ public class UsuarioConvert {
 
     public UsuarioOutput entityToOutput(UsuarioEntity usuarioCadastrado) {
         return modelMapper.map(usuarioCadastrado, UsuarioOutput.class);
+    }
+
+    public List<UsuarioOutput> listEntityToListOutput(List<UsuarioEntity> listaDeUsuarios) {
+        return listaDeUsuarios.stream().map((usuario) -> entityToOutput(usuario)).collect(Collectors.toList());
     }
 }
