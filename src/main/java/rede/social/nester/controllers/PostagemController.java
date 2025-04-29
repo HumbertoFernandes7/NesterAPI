@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import rede.social.nester.converts.PostagemConvert;
 import rede.social.nester.dtos.inputs.PostagemInput;
 import rede.social.nester.dtos.outputs.PostagemOutput;
@@ -31,7 +32,7 @@ public class PostagemController {
 
 	@PostMapping("/cadastrar")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public PostagemOutput cadastrarPostagem(@RequestBody PostagemInput postagemInput) {
+	public PostagemOutput cadastrarPostagem(@RequestBody @Valid PostagemInput postagemInput) {
 		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(postagemInput.getUsuarioId());
 		PostagemEntity postagemEntity = postagemConvert.inputToEntity(postagemInput);
 		postagemEntity.setUsuario(usuarioEncontrado);
@@ -39,5 +40,4 @@ public class PostagemController {
 		return postagemConvert.entityToOutput(postagemCadastrada);
 
 	}
-
 }
