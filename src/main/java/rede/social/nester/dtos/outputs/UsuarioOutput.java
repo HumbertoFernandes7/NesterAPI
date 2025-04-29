@@ -16,6 +16,4 @@ public class UsuarioOutput {
     private Date dataNascimento;
 
     private String email;
-
-    private String senha;
 }

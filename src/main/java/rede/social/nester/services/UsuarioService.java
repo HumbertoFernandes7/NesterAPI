@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.exceptions.NotFoundBussinessException;
 import rede.social.nester.repositories.UsuarioRepository;
@@ -15,6 +16,7 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
+	@Transactional
 	public UsuarioEntity cadastrarUsuario(UsuarioEntity usuarioEntity) {
 		if (verificaEmailExistente(usuarioEntity.getEmail())) {
 			return usuarioRepository.save(usuarioEntity);
@@ -36,6 +38,7 @@ public class UsuarioService {
 		return usuarioRepository.findAll();
 	}
 
+	@Transactional
 	public UsuarioEntity atualizarUsuario(UsuarioEntity usuarioInput) {
 		return usuarioRepository.save(usuarioInput);
 	}
