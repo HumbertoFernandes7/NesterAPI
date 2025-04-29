@@ -14,8 +14,11 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public UsuarioEntity cadastrarUsuario(UsuarioEntity usuarioEntity) {
-
+        if (verificaEmailExistente(usuarioEntity.getEmail())){
         return usuarioRepository.save(usuarioEntity);
+        }else {
+            throw new RuntimeException("Email já cadastrado no sistema!");
+        }
     }
 
     public UsuarioEntity buscaUsuarioPorId(Long id)  {
@@ -29,5 +32,18 @@ public class UsuarioService {
 
     public List<UsuarioEntity> listarUsuarios() {
     return usuarioRepository.findAll();
+    }
+
+    public UsuarioEntity atualizarUsuario(UsuarioEntity usuarioInput) {
+        return usuarioRepository.save(usuarioInput);
+    }
+
+    public boolean verificaEmailExistente(String email){
+        UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email);
+
+        if (usuarioEntity == null){
+            return true;
+        }
+        return false;
     }
 }
