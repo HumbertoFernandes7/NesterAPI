@@ -1,7 +1,10 @@
 package rede.social.nester.controllers;
 
 
+import jakarta.validation.Valid;
+import org.apache.catalina.filters.ExpiresFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import rede.social.nester.converts.UsuarioConvert;
 import rede.social.nester.dtos.inputs.UsuarioInput;
@@ -22,11 +25,11 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping("/cadastrar")
-    public UsuarioOutput cadastrarUsuario(@RequestBody UsuarioInput usuarioInput){
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public UsuarioOutput cadastrarUsuario(@RequestBody @Valid UsuarioInput usuarioInput){
         UsuarioEntity usuarioEntity = usuarioConvert.inputToEntity(usuarioInput);
         UsuarioEntity usuarioCadastrado = usuarioService.cadastrarUsuario(usuarioEntity);
-        UsuarioOutput usuarioOutput = usuarioConvert.entityToOutput(usuarioCadastrado);
-        return usuarioOutput;
+        return usuarioConvert.entityToOutput(usuarioCadastrado);
     }
 
     @DeleteMapping("/remover/{id}")
@@ -35,11 +38,24 @@ public class UsuarioController {
         usuarioService.removerUsuario(usuarioEncontrado);
     }
 
-    @GetMapping("/lista-todos")
+    @GetMapping("/listar-todos")
     public List<UsuarioOutput> listarUsuarios(){
        List<UsuarioEntity> listaDeUsuarios = usuarioService.listarUsuarios();
-       List<UsuarioOutput> usuarioOutputs = usuarioConvert.listEntityToListOutput(listaDeUsuarios);
-       return usuarioOutputs;
+       return usuarioConvert.listEntityToListOutput(listaDeUsuarios);
+    }
+
+    @GetMapping("/buscar/{id}")
+    public UsuarioOutput buscarPorId(@PathVariable Long id){
+        UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+        return usuarioConvert.entityToOutput(usuarioEncontrado);
+    }
+
+    @PostMapping("/atualizar/{id}")
+    public UsuarioOutput atualizaUsuario(@RequestBody @Valid UsuarioInput usuarioInput, @PathVariable Long id){
+       UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+       usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
+       UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
+       return usuarioConvert.entityToOutput(usuarioAtualizado);
     }
     
 }

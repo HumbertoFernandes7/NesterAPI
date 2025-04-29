@@ -27,4 +27,8 @@ public class UsuarioConvert {
     public List<UsuarioOutput> listEntityToListOutput(List<UsuarioEntity> listaDeUsuarios) {
         return listaDeUsuarios.stream().map((usuario) -> entityToOutput(usuario)).collect(Collectors.toList());
     }
+
+    public void copiaInputparaEntity(UsuarioEntity usuarioEncontrado, UsuarioInput usuarioInput) {
+        modelMapper.map(usuarioInput, usuarioEncontrado);
+    }
 }
