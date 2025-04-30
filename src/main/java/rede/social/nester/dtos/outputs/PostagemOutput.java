@@ -8,5 +8,4 @@ import lombok.Setter;
 public class PostagemOutput {
 	private Long id;
 	private	String mensagem;
-	private UsuarioOutput usuario;
 }

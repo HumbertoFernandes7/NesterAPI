@@ -5,7 +5,11 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import rede.social.nester.entities.PostagemEntity;
+import rede.social.nester.entities.UsuarioEntity;
+import rede.social.nester.exceptions.NotFoundBussinessException;
 import rede.social.nester.repositories.PostagemRepository;
+
+import java.util.List;
 
 @Service
 public class PostagemService {
@@ -18,5 +22,22 @@ public class PostagemService {
 		return postagemRepository.save(postagemEntity);
 	}
 
-	
+
+    public List<PostagemEntity> buscaPostagemDoUsuario(UsuarioEntity usuarioEncontrado) {
+		return postagemRepository.findAllByUsuario(usuarioEncontrado);
+    }
+
+	public PostagemEntity buscaPostagemPeloId(Long id) {
+		return postagemRepository.findById(id)
+				.orElseThrow(() -> new NotFoundBussinessException("Postagem não encontrada"));
+	}
+
+	public void removerPostagem(PostagemEntity postagem) {
+		postagemRepository.delete(postagem);
+	}
+
+	@Transactional
+	public PostagemEntity atualizaPostagem(PostagemEntity postagemEncontrada) {
+		return postagemRepository.save(postagemEncontrada);
+	}
 }

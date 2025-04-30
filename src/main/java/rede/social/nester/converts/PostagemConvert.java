@@ -8,6 +8,9 @@ import rede.social.nester.dtos.inputs.PostagemInput;
 import rede.social.nester.dtos.outputs.PostagemOutput;
 import rede.social.nester.entities.PostagemEntity;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class PostagemConvert {
 
@@ -22,4 +25,7 @@ public class PostagemConvert {
 		return modelMapper.map(postagemCadastrada, PostagemOutput.class);
 	}
 
+    public List<PostagemOutput> listEntityToListOutput(List<PostagemEntity> postagemEntity) {
+		return postagemEntity.stream().map((postagem) -> entityToOutput(postagem)).collect(Collectors.toList());
+    }
 }
