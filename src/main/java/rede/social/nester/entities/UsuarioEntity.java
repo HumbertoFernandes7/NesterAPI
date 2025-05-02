@@ -46,4 +46,8 @@ public class UsuarioEntity {
     @JsonBackReference
     private List<PostagemEntity> postagens;
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CurtidaEntity> curtidas;
+
+
 }
