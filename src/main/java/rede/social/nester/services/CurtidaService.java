@@ -19,17 +19,16 @@ public class CurtidaService {
     @Transactional
     public void curtirPostagem(PostagemEntity postagemEncontrada, UsuarioEntity usuarioEncontrado) {
 
-        if (verificaSeUsuarioJaCurtiuaPostagem(postagemEncontrada, usuarioEncontrado)){
+        if (verificaSeUsuarioJaCurtiuPostagem(postagemEncontrada, usuarioEncontrado)){
             CurtidaEntity curtida = new CurtidaEntity();
             curtida.setPostagem(postagemEncontrada);
             curtida.setUsuario(usuarioEncontrado);
             curtidaRepository.save(curtida);
         }else throw new BadRequestBussinessException("Usuario ja curtiu a publicação");
 
-
     }
 
-    public boolean verificaSeUsuarioJaCurtiuaPostagem(PostagemEntity postagem, UsuarioEntity usuario) {
+    public boolean verificaSeUsuarioJaCurtiuPostagem(PostagemEntity postagem, UsuarioEntity usuario) {
         CurtidaEntity curtidaEncontrada = curtidaRepository.findByPostagemAndUsuario(postagem, usuario);
         if (curtidaEncontrada == null){
             return true;
@@ -40,6 +39,7 @@ public class CurtidaService {
        return curtidaRepository.findById(id).orElseThrow(() -> new NotFoundBussinessException("Curtida não encontrada pelo id " + id ));
     }
 
+    @Transactional
     public void removerCurtida(CurtidaEntity curtidaEncontrada) {
         curtidaRepository.delete(curtidaEncontrada);
     }

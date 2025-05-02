@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostagemOutput {
+	
 	private Long id;
 	private	String mensagem;
 }
