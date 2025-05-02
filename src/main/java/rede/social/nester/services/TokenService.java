@@ -1,5 +1,9 @@
 package rede.social.nester.services;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -27,7 +31,10 @@ public class TokenService {
 	public String gerarToken(UsuarioEntity usuario) {
 		try {
 			Algorithm algorith = Algorithm.HMAC256(secret);
-			String token = JWT.create().withIssuer("nester-api").withSubject(usuario.getEmail())
+			String token = JWT.create()
+					.withIssuer("nester-api")
+					.withSubject(usuario.getEmail())
+					.withExpiresAt(geraDataExpiracaoToken())
 					.withClaim("role", usuario.getRole().toString()).sign(algorith);
 			return token;
 		} catch (JWTCreationException exception) {
@@ -39,7 +46,9 @@ public class TokenService {
 
 		try {
 			Algorithm algorith = Algorithm.HMAC256(secret);
-			return JWT.require(algorith).withIssuer("nester-api").build().verify(token).getSubject();
+			return JWT.require(algorith)
+					.withIssuer("nester-api")
+					.build().verify(token).getSubject();
 		} catch (JWTVerificationException exception) {
 			return "";
 		}
@@ -54,4 +63,7 @@ public class TokenService {
 		return usuarioRepository.findByEmail(auth.getName());
 	}
 
+	private Instant geraDataExpiracaoToken() {
+		return LocalDateTime.now().plusHours(24).toInstant(ZoneOffset.of("-03:00"));
+	}
 }
