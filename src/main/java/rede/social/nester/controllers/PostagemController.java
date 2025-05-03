@@ -2,6 +2,7 @@ package rede.social.nester.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -46,12 +47,14 @@ public class PostagemController {
 		return postagemConvert.listEntityToListOutput(postagemEntity);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/remover/{id}")
 	public void removerPostagem(@PathVariable Long id){
 		PostagemEntity postagem = postagemService.buscaPostagemPeloId(id);
 		postagemService.removerPostagem(postagem);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/atualizar/{id}")
 	public PostagemOutput atualizarPostagem(@RequestBody @Valid AtualizaPostagemInput atualizaPostagemInput, @PathVariable Long id){
 		PostagemEntity postagemEncontrada = postagemService.buscaPostagemPeloId(id);

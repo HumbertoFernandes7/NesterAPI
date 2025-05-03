@@ -58,6 +58,7 @@ public class UsuarioController {
         return usuarioConvert.entityToOutput(usuarioEncontrado);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/atualizar/{id}")
     public UsuarioOutput atualizaUsuario(@RequestBody @Valid UsuarioInput usuarioInput, @PathVariable Long id){
        UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
