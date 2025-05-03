@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class UsuarioController {
         return usuarioConvert.entityToOutput(usuarioCadastrado);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/remover/{id}")
     public void removerUsuario(@PathVariable Long id){
         UsuarioEntity usuarioEncontrado= usuarioService.buscaUsuarioPorId(id);
