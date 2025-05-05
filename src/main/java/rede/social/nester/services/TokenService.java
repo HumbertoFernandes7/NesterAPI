@@ -31,8 +31,11 @@ public class TokenService {
 	public String gerarToken(UsuarioEntity usuario) {
 		try {
 			Algorithm algorith = Algorithm.HMAC256(secret);
-			String token = JWT.create().withIssuer("nester-api").withSubject(usuario.getEmail())
-					.withExpiresAt(geraDataExpiracaoToken()).withClaim("role", usuario.getRole().toString())
+			String token = JWT.create()
+					.withIssuer("nester-api")
+					.withSubject(usuario.getEmail())
+					.withExpiresAt(geraDataExpiracaoToken())
+					.withClaim("role", usuario.getRole().toString())
 					.sign(algorith);
 			return token;
 		} catch (JWTCreationException exception) {
@@ -44,7 +47,11 @@ public class TokenService {
 
 		try {
 			Algorithm algorith = Algorithm.HMAC256(secret);
-			return JWT.require(algorith).withIssuer("nester-api").build().verify(token).getSubject();
+			return JWT.require(algorith)
+					.withIssuer("nester-api")
+					.build()
+					.verify(token)
+					.getSubject();
 		} catch (JWTVerificationException exception) {
 			return "";
 		}

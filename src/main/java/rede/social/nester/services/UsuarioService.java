@@ -46,16 +46,10 @@ public class UsuarioService {
 	}
 
 	@Transactional
-	public UsuarioEntity atualizarUsuario(UsuarioEntity usuarioInput) {
-		return usuarioRepository.save(usuarioInput);
-	}
-
-	public boolean verificaEmailExistente(String email) {
-		UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email);
-		if (usuarioEntity == null) {
-			return true;
-		}
-		return false;
+	public UsuarioEntity atualizarUsuario(UsuarioEntity usuarioEntity) {
+		String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioEntity.getSenha());
+		usuarioEntity.setSenha(encryptedPassword);
+		return usuarioRepository.save(usuarioEntity);
 	}
 
 	@Transactional
@@ -66,5 +60,15 @@ public class UsuarioService {
 			usuarioRepository.save(usuario);
 		}
 		return;
+	}
+	
+	//Metodos auxiliares 
+	
+	public boolean verificaEmailExistente(String email) {
+		UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email);
+		if (usuarioEntity == null) {
+			return true;
+		}
+		return false;
 	}
 }
