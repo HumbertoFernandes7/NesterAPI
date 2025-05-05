@@ -13,7 +13,7 @@ public class UsuarioInput {
     @NotNull(message = "Nome não pode ser nulo")
     private String nome;
 
-    @NotNull(message = "Data de Nascimento não pode ser nulo")
+    @NotNull(message = "Data nascimento não pode ser nulo")
     private LocalDate dataNascimento;
 
     @NotNull(message = "Email não pode ser nulo")
