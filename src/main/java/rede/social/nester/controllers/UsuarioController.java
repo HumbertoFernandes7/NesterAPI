@@ -19,6 +19,7 @@ import rede.social.nester.converts.UsuarioConvert;
 import rede.social.nester.dtos.inputs.UsuarioInput;
 import rede.social.nester.dtos.outputs.UsuarioOutput;
 import rede.social.nester.entities.UsuarioEntity;
+import rede.social.nester.services.TokenService;
 import rede.social.nester.services.UsuarioService;
 
 @RestController
@@ -30,6 +31,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+    
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/cadastrar")
     @ResponseStatus(code = HttpStatus.CREATED)
@@ -60,11 +64,19 @@ public class UsuarioController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/atualizar/{id}")
-    public UsuarioOutput atualizarUsuario(@RequestBody @Valid UsuarioInput usuarioInput, @PathVariable Long id){
+    public UsuarioOutput atualizarUsuarioPeloId(@RequestBody @Valid UsuarioInput usuarioInput, @PathVariable Long id){
        UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
        usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
        UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
        return usuarioConvert.entityToOutput(usuarioAtualizado);
+    }
+    
+    @PostMapping("/atualizar")
+    public UsuarioOutput atualizarUsuarioPeloToken(@RequestBody @Valid UsuarioInput usuarioInput) {
+    	UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+    	usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
+    	UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
+    	return usuarioConvert.entityToOutput(usuarioAtualizado);
     }
     
 }
