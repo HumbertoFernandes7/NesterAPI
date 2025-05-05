@@ -3,7 +3,7 @@ package rede.social.nester.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -18,12 +18,14 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Transactional
 	public UsuarioEntity cadastrarUsuario(UsuarioEntity usuarioEntity) {
 		if (verificaEmailExistente(usuarioEntity.getEmail())) {
-			String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioEntity.getSenha());
-			usuarioEntity.setSenha(encryptedPassword);
+			usuarioEntity.setSenha(criptografarSenha(usuarioEntity.getSenha()));
 			usuarioEntity.setRole(UsuarioEnum.USER);
 			return usuarioRepository.save(usuarioEntity);
 		} else {
@@ -47,28 +49,30 @@ public class UsuarioService {
 
 	@Transactional
 	public UsuarioEntity atualizarUsuario(UsuarioEntity usuarioEntity) {
-		String encryptedPassword = new BCryptPasswordEncoder().encode(usuarioEntity.getSenha());
-		usuarioEntity.setSenha(encryptedPassword);
+		usuarioEntity.setSenha(criptografarSenha(usuarioEntity.getSenha()));
 		return usuarioRepository.save(usuarioEntity);
 	}
 
 	@Transactional
 	public void criarUsuarioAdminAoIniciarAplicação(UsuarioEntity usuario) {
 		if (verificaEmailExistente(usuario.getEmail())) {
-			String encryptedPassword = new BCryptPasswordEncoder().encode(usuario.getSenha());
-			usuario.setSenha(encryptedPassword);
+			usuario.setSenha(criptografarSenha(usuario.getSenha()));
 			usuarioRepository.save(usuario);
 		}
 		return;
 	}
+
+	// Metodos auxiliares
 	
-	//Metodos auxiliares 
-	
-	public boolean verificaEmailExistente(String email) {
+	private boolean verificaEmailExistente(String email) {
 		UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email);
 		if (usuarioEntity == null) {
 			return true;
 		}
 		return false;
+	}
+
+	private String criptografarSenha(String senha) {
+		return passwordEncoder.encode(senha);
 	}
 }

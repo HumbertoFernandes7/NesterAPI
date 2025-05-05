@@ -78,5 +78,4 @@ public class UsuarioController {
     	UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
     	return usuarioConvert.entityToOutput(usuarioAtualizado);
     }
-    
 }

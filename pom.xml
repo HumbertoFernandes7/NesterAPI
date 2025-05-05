@@ -79,6 +79,11 @@
 			<artifactId>java-jwt</artifactId>
 			<version>4.5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>br.com.aceleragep</groupId>
+			<artifactId>acelera-gep-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
