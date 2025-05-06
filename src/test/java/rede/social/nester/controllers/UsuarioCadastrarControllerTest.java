@@ -21,7 +21,7 @@ import rede.social.nester.dtos.inputs.UsuarioInput;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
-public class CadastrarUsuarioControllerTest {
+public class UsuarioCadastrarControllerTest {
 
 	@Autowired
 	private MyMvcMock mvc;
