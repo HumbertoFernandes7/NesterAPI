@@ -1,5 +1,6 @@
 package rede.social.nester.controllers.utils;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -71,6 +72,10 @@ public class MyMvcMock {
 	public ResultActions updateWithBadRequest(String token, String uri, Object objeto) throws Exception {
 		return sendPut(token, uri, objeto).andExpect(status().isBadRequest());
 	}
+	
+	public ResultActions updateWithUnathorized(String token, String uri, Object objeto) throws Exception {
+		return sendPut(token, uri, objeto).andExpect(status().isForbidden());
+	}	
 
 	public ResultActions find(String token, String uri) throws Exception {
 		return sendGet(token, uri).andExpect(status().isOk());
@@ -90,6 +95,15 @@ public class MyMvcMock {
 
 	public ResultActions findWithNotFound(String token, String uri) throws Exception {
 		return sendGet(token, uri).andExpect(status().isNotFound());
+	}
+
+	public ResultActions delet(String token, String uri) throws Exception {
+		return sendDelet(token, uri).andExpect(status().isOk());
+	}
+	
+	public ResultActions deletWithUnathorized(String token, String uri) throws Exception {
+		return sendDelet(token, uri).andExpect(status().isForbidden());
+		
 	}
 
 	// Performs
@@ -119,6 +133,10 @@ public class MyMvcMock {
 
 	private ResultActions sendGet(String token, String uri) throws Exception {
 		return mvc.perform(get(uri).header("Authorization", "Bearer " + token).accept(MediaType.APPLICATION_JSON));
+	}
+
+	private ResultActions sendDelet(String token, String uri) throws Exception {
+		return mvc.perform(delete(uri).header("Authorization", "Bearer " + token));
 	}
 
 }

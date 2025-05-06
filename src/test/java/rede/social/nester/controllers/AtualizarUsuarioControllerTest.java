@@ -108,6 +108,15 @@ public class AtualizarUsuarioControllerTest {
 		usuarioInput.setSenha("");
 		mvc.updateWithBadRequest(token, uriAtualizarUsuario, usuarioInput);
 	}
+	
+	@Test
+	void quando_atualizarUsuarioPeloId_semAutorizacao_RetornaUnathorized() throws Exception {
+		usuarioInput.setEmail("teste3@teste.com");
+		usuarioInput.setNome("nome2");
+		usuarioInput.setDataNascimento(LocalDate.of(2005, 01, 10));
+		usuarioInput.setSenha("12333331");
+		mvc.updateWithUnathorized(this.token, uriAtualizarUsuario + "/2", usuarioInput);
+	}
 
 	/*
 	 * @Test void quando_atualizarUsuario_emailDeOutroUsuario_RetornaErro() throws
