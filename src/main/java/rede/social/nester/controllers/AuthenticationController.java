@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import rede.social.nester.dtos.inputs.AuthInput;
+import rede.social.nester.dtos.outputs.TokenOutput;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.exceptions.UnauthorizedAccessBussinessException;
 import rede.social.nester.services.TokenService;
@@ -26,12 +27,12 @@ public class AuthenticationController {
 	private TokenService tokenService;
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody @Valid AuthInput authInput) {
+	public ResponseEntity<TokenOutput> login(@RequestBody @Valid AuthInput authInput) {
 		try {
 			var usernamePassword = new UsernamePasswordAuthenticationToken(authInput.getEmail(), authInput.getSenha());
 			var auth = this.authenticationManager.authenticate(usernamePassword);
 			String token = tokenService.gerarToken((UsuarioEntity) auth.getPrincipal());
-			return ResponseEntity.ok(token);
+			return ResponseEntity.ok(new TokenOutput(token, "Bearer "));
 		} catch (Exception e) {
 			throw new UnauthorizedAccessBussinessException("Email ou senha inválidos!");
 		}
