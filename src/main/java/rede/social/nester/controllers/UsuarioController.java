@@ -49,6 +49,7 @@ public class UsuarioController {
        return usuarioConvert.listEntityToListOutput(listaDeUsuarios);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/buscar/{id}")
     public UsuarioOutput buscarPorId(@PathVariable Long id){
         UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
