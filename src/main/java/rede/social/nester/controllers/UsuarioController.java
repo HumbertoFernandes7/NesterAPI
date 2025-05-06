@@ -5,14 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import rede.social.nester.converts.UsuarioConvert;
@@ -63,7 +56,7 @@ public class UsuarioController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/atualizar/{id}")
+    @PutMapping("/atualizar/{id}")
     public UsuarioOutput atualizarUsuarioPeloId(@RequestBody @Valid UsuarioInput usuarioInput, @PathVariable Long id){
        UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
        usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
@@ -71,7 +64,7 @@ public class UsuarioController {
        return usuarioConvert.entityToOutput(usuarioAtualizado);
     }
     
-    @PostMapping("/atualizar")
+    @PutMapping("/atualizar")
     public UsuarioOutput atualizarUsuarioPeloToken(@RequestBody @Valid UsuarioInput usuarioInput) {
     	UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
     	usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);

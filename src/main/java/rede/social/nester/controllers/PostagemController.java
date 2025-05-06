@@ -55,7 +55,7 @@ public class PostagemController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping("/atualizar/{id}")
+	@PutMapping("/atualizar/{id}")
 	public PostagemOutput atualizarPostagem(@RequestBody @Valid AtualizaPostagemInput atualizaPostagemInput, @PathVariable Long id){
 		PostagemEntity postagemEncontrada = postagemService.buscaPostagemPeloId(id);
 		postagemEncontrada.setMensagem(atualizaPostagemInput.getMensagem());

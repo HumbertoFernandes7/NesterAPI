@@ -25,15 +25,15 @@ public class ExecutaAposInicioDaAplicacao implements ApplicationRunner {
 		usuario.setDataNascimento(LocalDate.of(2002, 8, 27));
 		usuario.setRole(UsuarioEnum.ADMIN);
 		usuario.setSenha("123456789");
-		usuarioService.criarUsuarioAdminAoIniciarAplicação(usuario);
+		usuarioService.criarUsuarioAdminAoIniciarAplicacao(usuario);
 		
 		UsuarioEntity usuario2 = new UsuarioEntity();
-		usuario2.setNome("Vinicius Santana");
-		usuario2.setEmail("email@hotmail.com");
-		usuario2.setDataNascimento(LocalDate.of(2002, 8, 27));
+		usuario2.setNome("Vinicius de Santana");
+		usuario2.setEmail("vnsrodrigues10@gmail.com");
+		usuario2.setDataNascimento(LocalDate.of(2001, 6, 16));
 		usuario2.setRole(UsuarioEnum.ADMIN);
 		usuario2.setSenha("123456789");
-		usuarioService.criarUsuarioAdminAoIniciarAplicação(usuario2);
+		usuarioService.criarUsuarioAdminAoIniciarAplicacao(usuario2);
 	}
 
 }

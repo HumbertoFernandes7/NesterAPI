@@ -54,12 +54,11 @@ public class UsuarioService {
 	}
 
 	@Transactional
-	public void criarUsuarioAdminAoIniciarAplicação(UsuarioEntity usuario) {
+	public void criarUsuarioAdminAoIniciarAplicacao(UsuarioEntity usuario) {
 		if (verificaEmailExistente(usuario.getEmail())) {
 			usuario.setSenha(criptografarSenha(usuario.getSenha()));
 			usuarioRepository.save(usuario);
 		}
-		return;
 	}
 
 	// Metodos auxiliares

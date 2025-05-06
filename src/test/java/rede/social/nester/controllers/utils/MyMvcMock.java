@@ -5,18 +5,43 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import rede.social.nester.dtos.inputs.AuthInput;
+import rede.social.nester.dtos.outputs.TokenOutput;
 
 @Component
 public class MyMvcMock {
 
 	@Autowired
 	private MockMvc mvc;
-	
+
+
+	public ResultActions autenticated(String uri, Object objeto) throws Exception {
+		return sendPost(uri, objeto).andExpect(status().isOk());
+	}
+
+	public TokenOutput autenticatedWithAdminToken(Object objeto) throws Exception {
+		AuthInput authInput = new AuthInput();
+		authInput.setEmail("vnsrodrigues10@gmail.com");
+		authInput.setSenha("123456789");
+		MvcResult result = this.autenticated("/auth/login", authInput).andReturn();
+		String contentAsString = result.getResponse().getContentAsString();
+		TokenOutput tokenOutput = new ObjectMapper().readValue(contentAsString, TokenOutput.class);
+		return tokenOutput;
+	}
+
+	public TokenOutput autenticatedWithUserAndReturnToken(Object objeto) throws Exception {
+		MvcResult result = this.autenticated("/auth/login", objeto).andReturn();
+		String contentAsString = result.getResponse().getContentAsString();
+		TokenOutput tokenOutput = new ObjectMapper().readValue(contentAsString, TokenOutput.class);
+		return tokenOutput;
+	}
 	
 	public ResultActions created(String uri, Object objeto) throws Exception {
 		return sendPost(uri, objeto).andExpect(status().isCreated());
@@ -33,13 +58,17 @@ public class MyMvcMock {
 	public ResultActions update(String uri, Object objeto) throws Exception {
 		return sendPut(uri, objeto).andExpect(status().isOk());
 	}
+
+	public ResultActions update(String token,String uri, Object objeto) throws Exception {
+		return sendPut(token, uri, objeto).andExpect(status().isOk());
+	}
 	
 	public ResultActions updateWithBadRequest(String uri, Object objeto) throws Exception {
 		return sendPut(uri, objeto).andExpect(status().isBadRequest());
 	}
 	
 	public ResultActions updateWithBadRequest(String token, String uri, Object objeto) throws Exception {
-		return sendPutWithToken(token, uri, objeto).andExpect(status().isBadRequest());
+		return sendPut(token, uri, objeto).andExpect(status().isBadRequest());
 	}
 	
 	public ResultActions find(String uri) throws Exception {
@@ -65,7 +94,7 @@ public class MyMvcMock {
 	
 	private ResultActions sendPost(String token, String uri, Object objeto) throws Exception{
 		return mvc.perform(post(uri)
-				.header("authorizarion", "Bearer " + token)
+				.header("Authorization", "Bearer " + token)
 				.content(JSON.asJsonString(objeto))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON));
@@ -78,9 +107,9 @@ public class MyMvcMock {
 				.accept(MediaType.APPLICATION_JSON));
 	}
 	
-	private ResultActions sendPutWithToken(String token, String uri, Object objeto) throws Exception {
+	private ResultActions sendPut(String token, String uri, Object objeto) throws Exception {
 		return mvc.perform(put(uri)
-				.header("authorization", "Bearer " + token)
+				.header("Authorization", "Bearer " + token)
 				.content(JSON.asJsonString(objeto))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON));
@@ -90,4 +119,5 @@ public class MyMvcMock {
 		return mvc.perform(get(uri)
 				.accept(MediaType.APPLICATION_JSON));
 	}
+
 }
