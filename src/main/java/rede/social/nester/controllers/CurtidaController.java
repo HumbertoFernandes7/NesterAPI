@@ -14,34 +14,34 @@ import rede.social.nester.entities.PostagemEntity;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.services.CurtidaService;
 import rede.social.nester.services.PostagemService;
-import rede.social.nester.services.UsuarioService;
+import rede.social.nester.services.TokenService;
 
 @RestController
 @RequestMapping("/curtida")
 public class CurtidaController {
 
-    @Autowired
-    private PostagemService postagemService;
+	@Autowired
+	private PostagemService postagemService;
 
-    @Autowired
-    private UsuarioService usuarioService;
+	@Autowired
+	private CurtidaService curtidaService;
 
-    @Autowired
-    private CurtidaService curtidaService;
+	@Autowired
+	private TokenService tokenService;
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{postagemId}/{usuarioId}")
-    public void curtirPostagem(@PathVariable Long postagemId,@PathVariable Long usuarioId){
-      PostagemEntity postagemEncontrada = postagemService.buscaPostagemPeloId(postagemId);
-      UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(usuarioId);
-      curtidaService.curtirPostagem(postagemEncontrada, usuarioEncontrado);
-    }
+	@ResponseStatus(HttpStatus.CREATED)
+	@PostMapping("/{postagemId}")
+	public void curtirPostagem(@PathVariable Long postagemId) {
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		PostagemEntity postagemEncontrada = postagemService.buscaPostagemPeloId(postagemId);
+		curtidaService.curtirPostagem(postagemEncontrada, usuarioEncontrado);
+	}
 
-    @DeleteMapping("/{id}")
-    public void removerCurtida(@PathVariable Long id){
-       CurtidaEntity curtidaEncontrada = curtidaService.buscaCurtidaPorID(id);
-       curtidaService.removerCurtida(curtidaEncontrada);
-    }
-
-
+	@DeleteMapping("/{postagemId}")
+	public void removerCurtida(@PathVariable Long postagemId) {
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		PostagemEntity postagemEncontrada = postagemService.buscaPostagemPeloId(postagemId);
+		CurtidaEntity curtidaEncontrada = curtidaService.buscaCurtidaPelaPostagemAndUsuario(postagemEncontrada, usuarioEncontrado);
+		curtidaService.removerCurtida(usuarioEncontrado, curtidaEncontrada);
+	}
 }
