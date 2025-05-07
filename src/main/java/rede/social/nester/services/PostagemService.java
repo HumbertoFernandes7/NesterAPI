@@ -1,5 +1,7 @@
 package rede.social.nester.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,8 +10,6 @@ import rede.social.nester.entities.PostagemEntity;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.exceptions.NotFoundBussinessException;
 import rede.social.nester.repositories.PostagemRepository;
-
-import java.util.List;
 
 @Service
 public class PostagemService {

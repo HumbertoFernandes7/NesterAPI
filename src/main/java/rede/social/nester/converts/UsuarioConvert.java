@@ -1,14 +1,15 @@
 package rede.social.nester.converts;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import rede.social.nester.dtos.inputs.UsuarioInput;
 import rede.social.nester.dtos.outputs.UsuarioOutput;
 import rede.social.nester.entities.UsuarioEntity;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class UsuarioConvert {

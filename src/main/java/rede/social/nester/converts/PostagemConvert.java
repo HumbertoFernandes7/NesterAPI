@@ -1,5 +1,8 @@
 package rede.social.nester.converts;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -7,9 +10,6 @@ import org.springframework.stereotype.Component;
 import rede.social.nester.dtos.inputs.PostagemInput;
 import rede.social.nester.dtos.outputs.PostagemOutput;
 import rede.social.nester.entities.PostagemEntity;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class PostagemConvert {

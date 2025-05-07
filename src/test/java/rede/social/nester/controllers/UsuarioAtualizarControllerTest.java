@@ -1,5 +1,7 @@
 package rede.social.nester.controllers;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -10,14 +12,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
-
 import org.springframework.test.web.servlet.ResultActions;
+
 import rede.social.nester.controllers.utils.MyMvcMock;
 import rede.social.nester.dtos.inputs.AuthInput;
 import rede.social.nester.dtos.inputs.UsuarioInput;
-import rede.social.nester.dtos.outputs.UsuarioOutput;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc

@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import rede.social.nester.dtos.inputs.AuthInput;
-import rede.social.nester.dtos.inputs.PostagemInput;
 import rede.social.nester.dtos.outputs.TokenOutput;
 
 @Component
