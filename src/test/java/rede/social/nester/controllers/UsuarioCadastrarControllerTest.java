@@ -44,8 +44,11 @@ public class UsuarioCadastrarControllerTest {
 
 	@Test
 	void quando_cadastrarUsuario_RetornaOk() throws Exception {
-		usuarioInput.setEmail("teste3@teste.com");
-		mvc.created(uri, usuarioInput);
+		ResultActions result = mvc.created(uri, usuarioInput);
+		result.andExpect(jsonPath("$.id").value(3))
+		.andExpect(jsonPath("$.nome").value("Teste"))
+		.andExpect(jsonPath("$.email").value("teste@teste.com"))
+		.andExpect(jsonPath("$.dataNascimento").value("2002-10-10"));
 	}
 
 	@Test

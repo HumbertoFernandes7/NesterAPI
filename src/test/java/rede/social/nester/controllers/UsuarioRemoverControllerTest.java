@@ -57,6 +57,6 @@ public class UsuarioRemoverControllerTest {
 	@Test
 	void quando_removerUsuario_RetornaUnauthorized() throws Exception {
 		this.token = mvc.autenticatedWithUserAndReturnToken(authInput).getToken();
-		mvc.deletWithUnathorized(this.token, uriRemover + "2");
+		mvc.deletWithForbiden(this.token, uriRemover + "2");
 	}
 }

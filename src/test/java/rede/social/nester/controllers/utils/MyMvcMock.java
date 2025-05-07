@@ -110,8 +110,11 @@ public class MyMvcMock {
 	}
 	
 	public ResultActions deletWithUnathorized(String token, String uri) throws Exception {
+		return sendDelet(token, uri).andExpect(status().isUnauthorized());
+	}
+	
+	public ResultActions deletWithForbiden(String token, String uri) throws Exception {
 		return sendDelet(token, uri).andExpect(status().isForbidden());
-		
 	}
 
 	// Performs

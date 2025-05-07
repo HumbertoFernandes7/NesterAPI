@@ -22,61 +22,51 @@ import rede.social.nester.dtos.inputs.UsuarioInput;
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 public class PostagemRemoverControllerTest {
 
-    @Autowired
-    private MyMvcMock mvc;
+	@Autowired
+	private MyMvcMock mvc;
 
-    private String token;
+	private PostagemInput postagemInput;
+	private UsuarioInput usuarioInput;
+	private AuthInput authInput;
+	private String token;
+	private String uriCadastrarUsuario;
+	private String uriRemoverPostagem;
+	private String uriCadastrarPostagem;
 
-    private PostagemInput postagemInput;
+	@BeforeEach
+	void antes() throws Exception {
 
-    private String uriCadastrarPostagem;
+		this.uriCadastrarPostagem = "/postagem/cadastrar";
+		this.uriCadastrarUsuario = "/usuarios/cadastrar";
+		this.uriRemoverPostagem = "/postagem/remover/";
 
-    private UsuarioInput usuarioInput;
+		this.usuarioInput = new UsuarioInput();
+		usuarioInput.setNome("Teste");
+		usuarioInput.setEmail("teste@teste.com");
+		usuarioInput.setDataNascimento(LocalDate.of(2002, 10, 10));
+		usuarioInput.setSenha("123");
+		mvc.created(this.uriCadastrarUsuario, this.usuarioInput);
 
-    private AuthInput authInput;
+		authInput = new AuthInput();
+		authInput.setEmail("teste@teste.com");
+		authInput.setSenha("123");
 
-    private String uriCadastrarUsuario;
+		this.token = mvc.autenticatedWithAdminToken().getToken();
 
-    private String uriRemoverPostagem;
+		this.postagemInput = new PostagemInput();
+		postagemInput.setMensagem("postagem xx");
+		mvc.created(this.token, this.uriCadastrarPostagem, this.postagemInput);
 
-    @BeforeEach
-    void antes() throws Exception {
+	}
 
-        this.uriCadastrarPostagem = "/postagem/cadastrar";
-        this.uriCadastrarUsuario = "/usuarios/cadastrar";
-        this.uriRemoverPostagem = "/postagem/remover/";
+	@Test
+	void quando_removerPostagem_RetornaOk() throws Exception {
+		mvc.delet(this.token, this.uriRemoverPostagem + "1");
+	}
 
-        this.usuarioInput = new UsuarioInput();
-        usuarioInput.setNome("Teste");
-        usuarioInput.setEmail("teste@teste.com");
-        usuarioInput.setDataNascimento(LocalDate.of(2002, 10, 10));
-        usuarioInput.setSenha("123");
-        mvc.created(this.uriCadastrarUsuario, this.usuarioInput);
-
-        authInput = new AuthInput();
-        authInput.setEmail("teste@teste.com");
-        authInput.setSenha("123");
-
-
-        this.token = mvc.autenticatedWithAdminToken().getToken();
-
-        this.postagemInput = new PostagemInput();
-        postagemInput.setUsuarioId(1l);
-        postagemInput.setMensagem("postagem xxxxxxxxxxxxx");
-        mvc.created(this.token, this.uriCadastrarPostagem, this.postagemInput);
-
-    }
-
-    @Test
-    void quando_removerPostagem_RetornaOk() throws Exception {
-       mvc.delet(this.token, this.uriRemoverPostagem + "1");
-    }
-
-    @Test
-    void quando_removerPostagem_RetornaUnauthorized() throws Exception {
-        this.token = mvc.autenticatedWithUserAndReturnToken(authInput).getToken();
-        mvc.deletWithUnathorized(this.token, this.uriRemoverPostagem + "1");
-    }
-
-
+	@Test
+	void quando_removerPostagem_RetornaUnauthorized() throws Exception {
+		this.token = mvc.autenticatedWithUserAndReturnToken(authInput).getToken();
+		mvc.deletWithUnathorized(this.token, this.uriRemoverPostagem + "1");
+	}
 }
