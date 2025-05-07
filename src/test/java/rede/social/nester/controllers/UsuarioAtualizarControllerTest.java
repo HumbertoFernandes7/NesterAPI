@@ -11,9 +11,13 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 
+import org.springframework.test.web.servlet.ResultActions;
 import rede.social.nester.controllers.utils.MyMvcMock;
 import rede.social.nester.dtos.inputs.AuthInput;
 import rede.social.nester.dtos.inputs.UsuarioInput;
+import rede.social.nester.dtos.outputs.UsuarioOutput;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -55,7 +59,11 @@ public class UsuarioAtualizarControllerTest {
 		usuarioInput.setNome("nome2");
 		usuarioInput.setDataNascimento(LocalDate.of(2005, 01, 10));
 		usuarioInput.setSenha("12333331");
-		mvc.update(this.token, uriAtualizarUsuario, usuarioInput);
+		ResultActions result = mvc.update(this.token, uriAtualizarUsuario, usuarioInput);
+		result.andExpect(jsonPath("$.id").value(3))
+				.andExpect(jsonPath("$.nome").value("nome2"))
+				.andExpect(jsonPath("$.email").value("teste3@teste.com"))
+				.andExpect(jsonPath("$.dataNascimento").value("2005-01-10"));
 	}
 	
 	@Test
@@ -65,7 +73,11 @@ public class UsuarioAtualizarControllerTest {
 		usuarioInput.setNome("nome2");
 		usuarioInput.setDataNascimento(LocalDate.of(2005, 01, 10));
 		usuarioInput.setSenha("12333331");
-		mvc.update(this.token, uriAtualizarUsuario + "/2", usuarioInput);
+		ResultActions result =  mvc.update(this.token, uriAtualizarUsuario + "/2", usuarioInput);
+		result.andExpect(jsonPath("$.id").value(2))
+				.andExpect(jsonPath("$.nome").value("nome2"))
+				.andExpect(jsonPath("$.email").value("teste3@teste.com"))
+				.andExpect(jsonPath("$.dataNascimento").value("2005-01-10"));
 	}
 
 	@Test
