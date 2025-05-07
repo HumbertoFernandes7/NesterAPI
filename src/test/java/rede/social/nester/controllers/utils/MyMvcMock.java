@@ -49,12 +49,20 @@ public class MyMvcMock {
 		return sendPost(uri, objeto).andExpect(status().isCreated());
 	}
 
+	public ResultActions created(String token, String uri, Object objeto) throws Exception {
+		return sendPost(token, uri, objeto).andExpect(status().isCreated());
+	}
+
 	public ResultActions createdWithBadRequest(String uri, Object objeto) throws Exception {
 		return sendPost(uri, objeto).andExpect(status().isBadRequest());
 	}
 
 	public ResultActions createdWithBadRequest(String token, String uri, Object objeto) throws Exception {
 		return sendPost(token, uri, objeto).andExpect(status().isBadRequest());
+	}
+
+	public ResultActions createdWithNotFound(String token, String uri, Object objeto) throws Exception {
+		return sendPost(token, uri, objeto).andExpect(status().isNotFound());
 	}
 
 	public ResultActions update(String uri, Object objeto) throws Exception {
@@ -138,5 +146,6 @@ public class MyMvcMock {
 	private ResultActions sendDelet(String token, String uri) throws Exception {
 		return mvc.perform(delete(uri).header("Authorization", "Bearer " + token));
 	}
+
 
 }
