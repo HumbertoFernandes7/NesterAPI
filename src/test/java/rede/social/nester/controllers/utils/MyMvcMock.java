@@ -89,13 +89,15 @@ public class MyMvcMock {
 		return sendGet(token, uri).andExpect(status().isOk());
 	}
 
-	public ResultActions findwithUnauthorized(String uri) throws Exception {
+	public ResultActions findWithForbidden(String uri) throws Exception {
 		return sendGet(uri).andExpect(status().isForbidden());
 	}
 
-	public ResultActions findwithUnauthorized(String token, String uri) throws Exception {
-		return sendGet(token, uri).andExpect(status().isForbidden());
+	public ResultActions findWithUnauthorized(String token, String uri) throws Exception {
+		return sendGet(token, uri).andExpect(status().isUnauthorized());
 	}
+
+
 
 	public ResultActions findWithBadRequest(String token, String uri) throws Exception {
 		return sendGet(token, uri).andExpect(status().isBadRequest());

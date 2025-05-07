@@ -76,8 +76,8 @@ public class UsuarioListarControllerTest {
 	}
 
 	@Test
-	void quando_listarTodosUsuarios_semToken_RetornaUnauthorized() throws Exception {
-		mvc.findwithUnauthorized(uri);
+	void quando_listarTodosUsuarios_semToken_RetornaErro() throws Exception {
+		mvc.findWithForbidden(uri);
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class UsuarioListarControllerTest {
 	}
 
 	@Test
-	void quando_listarUsuarioPeloId_RetornaUnauthorized() throws Exception {
-		mvc.findwithUnauthorized(this.token, uriPeloId + "3");
+	void quando_listarUsuarioPeloId_SemToken_RetornaErro() throws Exception {
+		mvc.findWithForbidden(uriPeloId + "3");
 	}
 }
