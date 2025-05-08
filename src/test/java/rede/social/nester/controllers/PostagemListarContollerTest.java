@@ -49,14 +49,6 @@ public class PostagemListarContollerTest {
         this.uriCadastrarUsuario = "/usuarios/cadastrar";
         this.uriListarPostagem = "/postagem/usuario";
 
-        this.usuarioInput = new UsuarioInput();
-        usuarioInput.setNome("Teste");
-        usuarioInput.setEmail("teste@teste.com");
-        usuarioInput.setDataNascimento(LocalDate.of(2002, 10, 10));
-        usuarioInput.setSenha("123");
-        mvc.created(this.uriCadastrarUsuario, this.usuarioInput);
-
-
         this.token = mvc.autenticatedWithAdminToken().getToken();
 
         this.postagemInput = new PostagemInput();
