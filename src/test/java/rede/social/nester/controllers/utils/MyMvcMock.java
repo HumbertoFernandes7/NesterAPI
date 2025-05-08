@@ -53,8 +53,16 @@ public class MyMvcMock {
 		return sendPost(token, uri, objeto).andExpect(status().isCreated());
 	}
 
+	public ResultActions created(String token, String uri) throws Exception {
+		return sendPost(token, uri).andExpect(status().isCreated());
+	}
+
 	public ResultActions createdWithBadRequest(String uri, Object objeto) throws Exception {
 		return sendPost(uri, objeto).andExpect(status().isBadRequest());
+	}
+
+	public ResultActions createdWithForbidden(String uri, Object objeto) throws Exception {
+		return sendPost(uri, objeto).andExpect(status().isForbidden());
 	}
 
 	public ResultActions createdWithBadRequest(String token, String uri, Object objeto) throws Exception {
@@ -65,16 +73,8 @@ public class MyMvcMock {
 		return sendPost(token, uri, objeto).andExpect(status().isNotFound());
 	}
 
-	public ResultActions update(String uri, Object objeto) throws Exception {
-		return sendPut(uri, objeto).andExpect(status().isOk());
-	}
-
 	public ResultActions update(String token, String uri, Object objeto) throws Exception {
 		return sendPut(token, uri, objeto).andExpect(status().isOk());
-	}
-
-	public ResultActions updateWithBadRequest(String uri, Object objeto) throws Exception {
-		return sendPut(uri, objeto).andExpect(status().isBadRequest());
 	}
 
 	public ResultActions updateWithBadRequest(String token, String uri, Object objeto) throws Exception {
@@ -93,20 +93,6 @@ public class MyMvcMock {
 		return sendGet(uri).andExpect(status().isForbidden());
 	}
 
-	public ResultActions findWithUnauthorized(String token, String uri) throws Exception {
-		return sendGet(token, uri).andExpect(status().isUnauthorized());
-	}
-
-
-
-	public ResultActions findWithBadRequest(String token, String uri) throws Exception {
-		return sendGet(token, uri).andExpect(status().isBadRequest());
-	}
-
-	public ResultActions findWithNotFound(String token, String uri) throws Exception {
-		return sendGet(token, uri).andExpect(status().isNotFound());
-	}
-
 	public ResultActions delet(String token, String uri) throws Exception {
 		return sendDelet(token, uri).andExpect(status().isOk());
 	}
@@ -114,9 +100,17 @@ public class MyMvcMock {
 	public ResultActions deletWithUnathorized(String token, String uri) throws Exception {
 		return sendDelet(token, uri).andExpect(status().isUnauthorized());
 	}
+
+	public ResultActions deletWithNotFound(String token, String uri) throws Exception {
+		return sendDelet(token, uri).andExpect(status().isNotFound());
+	}
 	
 	public ResultActions deletWithForbiden(String token, String uri) throws Exception {
 		return sendDelet(token, uri).andExpect(status().isForbidden());
+	}
+
+	public ResultActions deletWithNoToken(String uri) throws Exception {
+		return sendDelet(uri).andExpect(status().isForbidden());
 	}
 
 	// Performs
@@ -130,9 +124,8 @@ public class MyMvcMock {
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
 	}
 
-	private ResultActions sendPut(String uri, Object objeto) throws Exception {
-		return mvc.perform(put(uri).content(JSON.asJsonString(objeto)).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON));
+	private ResultActions sendPost(String token, String uri) throws Exception {
+		return mvc.perform(post(uri).header("Authorization", "Bearer " + token));
 	}
 
 	private ResultActions sendPut(String token, String uri, Object objeto) throws Exception {
@@ -150,6 +143,10 @@ public class MyMvcMock {
 
 	private ResultActions sendDelet(String token, String uri) throws Exception {
 		return mvc.perform(delete(uri).header("Authorization", "Bearer " + token));
+	}
+
+	private ResultActions sendDelet(String uri) throws Exception {
+		return mvc.perform(delete(uri));
 	}
 
 

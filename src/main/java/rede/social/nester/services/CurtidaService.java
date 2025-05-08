@@ -48,7 +48,7 @@ public class CurtidaService {
 		if(curtidaEncontrada != null) {
 			return curtidaEncontrada;
 		}else {
-			throw new NotFoundBussinessException("Não foi encontrado uma curtida com id");
+			throw new NotFoundBussinessException("Curtida não encontrada pelo usuario na postagem com id: " + postagemEncontrada.getId());
 		}
 	}
 
