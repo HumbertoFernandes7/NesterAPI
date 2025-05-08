@@ -1,6 +1,8 @@
 package rede.social.nester.controllers;
 
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +12,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.ResultActions;
+
 import rede.social.nester.controllers.utils.MyMvcMock;
-import rede.social.nester.dtos.inputs.AuthInput;
 import rede.social.nester.dtos.inputs.PostagemInput;
-import rede.social.nester.dtos.inputs.UsuarioInput;
-
-import java.time.LocalDate;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,25 +25,15 @@ public class PostagemListarContollerTest {
     @Autowired
     private MyMvcMock mvc;
 
-    private String uriCadastrarUsuario;
-
-    private UsuarioInput usuarioInput;
-
-    private AuthInput authInput;
-
-    private String token;
-
     private PostagemInput postagemInput;
-
     private String uriCadastrarPostagem;
-
     private String uriListarPostagem;
+    private String token;
 
     @BeforeEach
     void antes() throws Exception {
 
         this.uriCadastrarPostagem = "/postagem/cadastrar";
-        this.uriCadastrarUsuario = "/usuarios/cadastrar";
         this.uriListarPostagem = "/postagem/usuario";
 
         this.token = mvc.autenticatedWithAdminToken().getToken();
