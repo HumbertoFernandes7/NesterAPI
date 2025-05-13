@@ -24,6 +24,7 @@ import rede.social.nester.services.PostagemService;
 import rede.social.nester.services.TokenService;
 import rede.social.nester.services.UsuarioService;
 
+
 @RestController
 @RequestMapping("/postagem")
 public class PostagemController {
@@ -80,4 +81,12 @@ public class PostagemController {
 		PostagemEntity postagemAtualizada = postagemService.atualizarPostagem(usuarioEncontrado, postagemEncontrada);
 		return postagemConvert.entityToOutput(postagemAtualizada);
 	}
+	
+	@GetMapping("/foryou")
+	public List<PostagemOutput> listarForYou() {
+		List<PostagemEntity> postagensEncontras = postagemService.buscaPostagensParaForYou();
+		return postagemConvert.listEntityToListOutput(postagensEncontras);
+		 
+	}
+	
 }

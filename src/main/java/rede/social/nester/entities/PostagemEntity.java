@@ -1,5 +1,6 @@
 package rede.social.nester.entities;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -29,6 +30,9 @@ public class PostagemEntity {
 	
 	@Column(name = "mensagem")
 	private String mensagem;
+	
+	@Column(name = "dataPostagem")
+	private LocalDateTime dataPostagem;
 
 	@OneToMany(mappedBy = "postagem", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CurtidaEntity> curtidas;

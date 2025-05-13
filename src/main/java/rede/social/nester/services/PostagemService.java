@@ -1,8 +1,11 @@
 package rede.social.nester.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -21,6 +24,7 @@ public class PostagemService {
 
 	@Transactional
 	public PostagemEntity cadastraPostagem(PostagemEntity postagemEntity) {
+		postagemEntity.setDataPostagem(LocalDateTime.now());
 		return postagemRepository.save(postagemEntity);
 	}
 
@@ -49,5 +53,11 @@ public class PostagemService {
 		} else {
 			throw new UnauthorizedAccessBussinessException("Usuario não tem permissão necessária!");
 		}
+	}
+
+	public List<PostagemEntity> buscaPostagensParaForYou() {
+		PageRequest page = PageRequest.of(0, 50, Sort.by("dataPostagem").descending());
+		List<PostagemEntity> ultimas50Publicações = postagemRepository.findUltimas50Publicacoes(page);
+		return ultimas50Publicações;
 	}
 }
