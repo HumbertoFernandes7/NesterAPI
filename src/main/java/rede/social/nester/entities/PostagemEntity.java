@@ -28,7 +28,7 @@ public class PostagemEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "mensagem")
+	@Column(name = "mensagem", length = 5000)
 	private String mensagem;
 	
 	@Column(name = "dataPostagem")
