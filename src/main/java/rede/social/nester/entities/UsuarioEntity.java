@@ -17,6 +17,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,6 +61,15 @@ public class UsuarioEntity implements UserDetails {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CurtidaEntity> curtidas;
+    
+    @Column(name = "dadosCompletos", length = 500)
+    private String dadosCompletos;
+    
+    @PrePersist
+    @PreUpdate
+    private void prePersistOrUpdate() {
+        this.dadosCompletos = String.format("%s <%s>", this.nome, this.email);
+    }
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -96,6 +107,4 @@ public class UsuarioEntity implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-
-
 }

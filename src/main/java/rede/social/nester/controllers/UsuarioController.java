@@ -29,57 +29,64 @@ import rede.social.nester.services.UsuarioService;
 @CrossOrigin("*")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioConvert usuarioConvert;
+	@Autowired
+	private UsuarioConvert usuarioConvert;
 
-    @Autowired
-    private UsuarioService usuarioService;
-    
-    @Autowired
-    private TokenService tokenService;
+	@Autowired
+	private UsuarioService usuarioService;
 
-    @PostMapping("/cadastrar")
-    @ResponseStatus(code = HttpStatus.CREATED)
-    public UsuarioOutput cadastrarUsuario(@RequestBody @Valid UsuarioInput usuarioInput){
-        UsuarioEntity usuarioEntity = usuarioConvert.inputToEntity(usuarioInput);
-        UsuarioEntity usuarioCadastrado = usuarioService.cadastrarUsuario(usuarioEntity);
-        return usuarioConvert.entityToOutput(usuarioCadastrado);
-    }
+	@Autowired
+	private TokenService tokenService;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/remover/{id}")
-    public void removerUsuario(@PathVariable Long id){
-        UsuarioEntity usuarioEncontrado= usuarioService.buscaUsuarioPorId(id);
-        usuarioService.removerUsuario(usuarioEncontrado);
-    }
+	@PostMapping("/cadastrar")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public UsuarioOutput cadastrarUsuario(@RequestBody @Valid UsuarioInput usuarioInput) {
+		UsuarioEntity usuarioEntity = usuarioConvert.inputToEntity(usuarioInput);
+		UsuarioEntity usuarioCadastrado = usuarioService.cadastrarUsuario(usuarioEntity);
+		return usuarioConvert.entityToOutput(usuarioCadastrado);
+	}
 
-    @GetMapping("/listar-todos")
-    public List<UsuarioOutput> listarUsuarios(){
-       List<UsuarioEntity> listaDeUsuarios = usuarioService.listarUsuarios();
-       return usuarioConvert.listEntityToListOutput(listaDeUsuarios);
-    }
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/remover/{id}")
+	public void removerUsuario(@PathVariable Long id) {
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+		usuarioService.removerUsuario(usuarioEncontrado);
+	}
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/buscar/{id}")
-    public UsuarioOutput buscarPorId(@PathVariable Long id){
-        UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
-        return usuarioConvert.entityToOutput(usuarioEncontrado);
-    }
+	@GetMapping("/listar-todos")
+	public List<UsuarioOutput> listarUsuarios() {
+		List<UsuarioEntity> listaDeUsuarios = usuarioService.listarUsuarios();
+		return usuarioConvert.listEntityToListOutput(listaDeUsuarios);
+	}
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/atualizar/{id}")
-    public UsuarioOutput atualizarUsuarioPeloId(@RequestBody @Valid UsuarioInput usuarioInput, @PathVariable Long id){
-       UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
-       usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
-       UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
-       return usuarioConvert.entityToOutput(usuarioAtualizado);
-    }
-    
-    @PutMapping("/atualizar")
-    public UsuarioOutput atualizarUsuarioPeloToken(@RequestBody @Valid UsuarioInput usuarioInput) {
-    	UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
-    	usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
-    	UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
-    	return usuarioConvert.entityToOutput(usuarioAtualizado);
-    }
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/buscar/{id}")
+	public UsuarioOutput buscarPorId(@PathVariable Long id) {
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+		return usuarioConvert.entityToOutput(usuarioEncontrado);
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@PutMapping("/atualizar/{id}")
+	public UsuarioOutput atualizarUsuarioPeloId(@RequestBody @Valid UsuarioInput usuarioInput, @PathVariable Long id) {
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+		usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
+		UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
+		return usuarioConvert.entityToOutput(usuarioAtualizado);
+	}
+
+	@PutMapping("/atualizar")
+	public UsuarioOutput atualizarUsuarioPeloToken(@RequestBody @Valid UsuarioInput usuarioInput) {
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
+		UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
+		return usuarioConvert.entityToOutput(usuarioAtualizado);
+	}
+
+	@GetMapping("/buscar")
+	public List<UsuarioOutput> buscaUsuarioPor(String por) {
+		List<UsuarioEntity> usuariosEncontrado = usuarioService.buscaUsuarioPor(por);
+		return usuarioConvert.listEntityToListOutput(usuariosEncontrado);
+	}
+
 }

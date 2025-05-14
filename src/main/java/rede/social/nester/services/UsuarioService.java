@@ -3,6 +3,7 @@ package rede.social.nester.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -73,5 +74,10 @@ public class UsuarioService {
 
 	private String criptografarSenha(String senha) {
 		return passwordEncoder.encode(senha);
+	}
+
+	public List<UsuarioEntity> buscaUsuarioPor(String por) {
+		PageRequest page = PageRequest.of(0, 10);
+		return usuarioRepository.findByDadosCompletosContains(por, page);
 	}
 }
