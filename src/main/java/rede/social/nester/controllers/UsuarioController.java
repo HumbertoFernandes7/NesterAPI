@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import rede.social.nester.converts.UsuarioConvert;
+import rede.social.nester.dtos.inputs.EmailResetInput;
 import rede.social.nester.dtos.inputs.UsuarioInput;
 import rede.social.nester.dtos.outputs.UsuarioOutput;
 import rede.social.nester.entities.UsuarioEntity;
+import rede.social.nester.services.EmailService;
 import rede.social.nester.services.TokenService;
 import rede.social.nester.services.UsuarioService;
 
@@ -37,6 +39,9 @@ public class UsuarioController {
 
 	@Autowired
 	private TokenService tokenService;
+	
+	@Autowired
+	private EmailService emailService;
 
 	@PostMapping("/cadastrar")
 	@ResponseStatus(code = HttpStatus.CREATED)
@@ -88,5 +93,10 @@ public class UsuarioController {
 		List<UsuarioEntity> usuariosEncontrado = usuarioService.buscaUsuarioPor(por);
 		return usuarioConvert.listEntityToListOutput(usuariosEncontrado);
 	}
-
+	
+	@PostMapping("/enviar-email")
+	public void enviarEmailHashRedefinirSenha(@RequestBody EmailResetInput emailReset) {
+		UsuarioEntity usuarioEncontrado =  usuarioService.buscaUsuarioPorEmail(emailReset.getEmail());
+		emailService.enviarEmailResetSenha(usuarioEncontrado);
+	}
 }

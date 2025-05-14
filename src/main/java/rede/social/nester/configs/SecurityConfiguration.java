@@ -37,7 +37,7 @@ public class SecurityConfiguration {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize
 						.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-						.requestMatchers(HttpMethod.POST, "/usuarios/cadastrar").permitAll()
+						.requestMatchers(HttpMethod.POST, "/usuarios/cadastrar", "usuarios/enviar-email").permitAll()
 						.anyRequest().hasAnyRole("USER", "ADMIN")
 				)
 				.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

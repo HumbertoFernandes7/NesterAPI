@@ -36,7 +36,17 @@ public class UsuarioService {
 
 	public UsuarioEntity buscaUsuarioPorId(Long id) {
 		return usuarioRepository.findById(id)
-				.orElseThrow(() -> new NotFoundBussinessException("usuario não encontrado!"));
+				.orElseThrow(() -> new NotFoundBussinessException("Usuario não encontrado!"));
+	}
+	
+	public UsuarioEntity buscaUsuarioPorEmail(String email) {
+		return usuarioRepository.findUsuarioByEmail(email)
+				.orElseThrow(() -> new NotFoundBussinessException("Email não encontrado!"));
+	}
+	
+	public List<UsuarioEntity> buscaUsuarioPor(String por) {
+		PageRequest page = PageRequest.of(0, 10);
+		return usuarioRepository.findByDadosCompletosContains(por, page);
 	}
 
 	@Transactional
@@ -74,10 +84,5 @@ public class UsuarioService {
 
 	private String criptografarSenha(String senha) {
 		return passwordEncoder.encode(senha);
-	}
-
-	public List<UsuarioEntity> buscaUsuarioPor(String por) {
-		PageRequest page = PageRequest.of(0, 10);
-		return usuarioRepository.findByDadosCompletosContains(por, page);
 	}
 }
