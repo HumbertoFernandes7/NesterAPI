@@ -30,7 +30,7 @@ public class UsuarioListarControllerTest {
 	private UsuarioInput usuarioInput;
 	private String uri;
 	private String uriCadastrar;
-	private String uriPeloId;
+	private String uriBuscar;
 	private String token;
 	private AuthInput authInput;
 
@@ -39,7 +39,7 @@ public class UsuarioListarControllerTest {
 
 		this.uri = "/usuarios/listar-todos";
 		this.uriCadastrar = "/usuarios/cadastrar";
-		this.uriPeloId = "/usuarios/buscar/";
+		this.uriBuscar = "/usuarios/buscar";
 
 		this.authInput = new AuthInput();
 		this.authInput.setEmail("email@hotmail.com");
@@ -83,7 +83,7 @@ public class UsuarioListarControllerTest {
 	@Test
 	void quando_listarUsuarioPeloId_RetornaOk() throws Exception {
 		this.token = mvc.autenticatedWithAdminToken().getToken();
-		ResultActions result = mvc.find(this.token, uriPeloId + "3");
+		ResultActions result = mvc.find(this.token, uriBuscar + "/3");
 		result.andExpect(jsonPath("$.id").value(3)).andExpect(jsonPath("$.nome").value("nome teste"))
 				.andExpect(jsonPath("$.email").value("email@hotmail.com"))
 				.andExpect(jsonPath("$.dataNascimento").value("2002-10-10"))
@@ -92,6 +92,20 @@ public class UsuarioListarControllerTest {
 
 	@Test
 	void quando_listarUsuarioPeloId_SemToken_RetornaErro() throws Exception {
-		mvc.findWithForbidden(uriPeloId + "3");
+		mvc.findWithForbidden(uriBuscar + "/3");
+	}
+	
+	@Test
+	void quando_listarUsuarioPorString_RetornaOk() throws Exception {
+		ResultActions result = mvc.find(this.token, this.uriBuscar + "?por=humb");
+		result.andExpect(jsonPath("$[0].nome").value("Humberto Fernandes"));
+		result.andExpect(jsonPath("$[0].email").value("humbertofernandes08@hotmail.com"));
+		result.andExpect(jsonPath("$[0].dataNascimento").value("2002-08-27"));
+		result.andExpect(jsonPath("$[0].role").value("ADMIN"));
+	}
+	
+	@Test
+	void quando_listarUsuarioPorString_SemToken_RetornaErro() throws Exception {
+		 mvc.findWithForbidden(this.uriBuscar + "?por=humb");
 	}
 }
