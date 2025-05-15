@@ -16,7 +16,7 @@ public class ExecutaAposInicioDaAplicacao implements ApplicationRunner {
 
 	@Autowired
 	private UsuarioService usuarioService;
-	
+
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		UsuarioEntity usuario = new UsuarioEntity();
@@ -26,7 +26,7 @@ public class ExecutaAposInicioDaAplicacao implements ApplicationRunner {
 		usuario.setRole(UsuarioEnum.ADMIN);
 		usuario.setSenha("123456789");
 		usuarioService.criarUsuarioAdminAoIniciarAplicacao(usuario);
-		
+
 		UsuarioEntity usuario2 = new UsuarioEntity();
 		usuario2.setNome("Vinicius de Santana");
 		usuario2.setEmail("vnsrodrigues10@gmail.com");

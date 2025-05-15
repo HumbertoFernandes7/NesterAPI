@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import rede.social.nester.dtos.inputs.ResetSenhaInput;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.enuns.UsuarioEnum;
 import rede.social.nester.exceptions.BadRequestBussinessException;
@@ -19,9 +20,12 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private HashService hashService;
 
 	@Transactional
 	public UsuarioEntity cadastrarUsuario(UsuarioEntity usuarioEntity) {
@@ -38,12 +42,12 @@ public class UsuarioService {
 		return usuarioRepository.findById(id)
 				.orElseThrow(() -> new NotFoundBussinessException("Usuario não encontrado!"));
 	}
-	
+
 	public UsuarioEntity buscaUsuarioPorEmail(String email) {
 		return usuarioRepository.findUsuarioByEmail(email)
 				.orElseThrow(() -> new NotFoundBussinessException("Email não encontrado!"));
 	}
-	
+
 	public List<UsuarioEntity> buscaUsuarioPor(String por) {
 		PageRequest page = PageRequest.of(0, 10);
 		return usuarioRepository.findByDadosCompletosContains(por, page);
@@ -72,8 +76,21 @@ public class UsuarioService {
 		}
 	}
 
+	@Transactional
+	public void recuperarSenha(UsuarioEntity usuarioEncontrado, String hash, ResetSenhaInput resetSenhaInput) {
+		String senha = resetSenhaInput.getSenha();
+		String repetirSenha = resetSenhaInput.getRepetirSenha();
+		if (senha.equals(repetirSenha)) {
+			usuarioEncontrado.setSenha(criptografarSenha(senha));
+			usuarioRepository.save(usuarioEncontrado);
+			hashService.deletarHash(hash);
+		} else {
+			throw new BadRequestBussinessException("Senha e Repetir senha são diferentes");
+		}
+	}
+
 	// Metodos auxiliares
-	
+
 	private boolean verificaEmailExistente(String email) {
 		UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email);
 		if (usuarioEntity == null) {

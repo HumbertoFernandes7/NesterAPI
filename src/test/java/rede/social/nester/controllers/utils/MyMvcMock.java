@@ -80,10 +80,10 @@ public class MyMvcMock {
 	public ResultActions updateWithBadRequest(String token, String uri, Object objeto) throws Exception {
 		return sendPut(token, uri, objeto).andExpect(status().isBadRequest());
 	}
-	
+
 	public ResultActions updateWithUnathorized(String token, String uri, Object objeto) throws Exception {
 		return sendPut(token, uri, objeto).andExpect(status().isForbidden());
-	}	
+	}
 
 	public ResultActions find(String token, String uri) throws Exception {
 		return sendGet(token, uri).andExpect(status().isOk());
@@ -96,7 +96,7 @@ public class MyMvcMock {
 	public ResultActions delet(String token, String uri) throws Exception {
 		return sendDelet(token, uri).andExpect(status().isOk());
 	}
-	
+
 	public ResultActions deletWithUnathorized(String token, String uri) throws Exception {
 		return sendDelet(token, uri).andExpect(status().isUnauthorized());
 	}
@@ -104,7 +104,7 @@ public class MyMvcMock {
 	public ResultActions deletWithNotFound(String token, String uri) throws Exception {
 		return sendDelet(token, uri).andExpect(status().isNotFound());
 	}
-	
+
 	public ResultActions deletWithForbiden(String token, String uri) throws Exception {
 		return sendDelet(token, uri).andExpect(status().isForbidden());
 	}
@@ -148,6 +148,5 @@ public class MyMvcMock {
 	private ResultActions sendDelet(String uri) throws Exception {
 		return mvc.perform(delete(uri));
 	}
-
 
 }

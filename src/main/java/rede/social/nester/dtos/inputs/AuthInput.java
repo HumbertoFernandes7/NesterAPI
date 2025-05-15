@@ -10,7 +10,7 @@ public class AuthInput {
 
 	@NotNull(message = "Email não pode ser nulo")
 	private String email;
-	
+
 	@NotNull(message = "Senha não pode ser nulo")
 	private String senha;
 }

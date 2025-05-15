@@ -5,6 +5,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,22 +27,22 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
+
+	@Value("${app.frontend.url}")
+	private String frontendUrl;
 	
 	@Autowired
 	private SecurityFilter securityFilter;
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-		return httpSecurity.cors(withDefaults())
-				.csrf(csrf -> csrf.disable())
+		return httpSecurity.cors(withDefaults()).csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(authorize -> authorize
-						.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-						.requestMatchers(HttpMethod.POST, "/usuarios/cadastrar", "usuarios/enviar-email").permitAll()
-						.anyRequest().hasAnyRole("USER", "ADMIN")
-				)
-				.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-				.build();
+				.authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/auth/login")
+						.permitAll().requestMatchers(HttpMethod.POST, "/usuarios/cadastrar", "usuarios/enviar-email")
+						.permitAll().requestMatchers(HttpMethod.PUT, "/usuarios/recuperar-senha/**").permitAll()
+						.anyRequest().hasAnyRole("USER", "ADMIN"))
+				.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
 	}
 
 	@Bean
@@ -49,19 +50,19 @@ public class SecurityConfiguration {
 			throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
-	
-	@Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        var config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("http://localhost:4200"));
-        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
 
-        var source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		var config = new CorsConfiguration();
+		config.setAllowedOriginPatterns(List.of(frontendUrl));
+		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		config.setAllowedHeaders(List.of("*"));
+		config.setAllowCredentials(true);
+
+		var source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+		return source;
+	}
 
 	@Bean
 	PasswordEncoder passwordEncoder() {

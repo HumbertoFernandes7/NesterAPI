@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TokenOutput {
 
-   private String token;
-   private String tipo;
+	private String token;
+	private String tipo;
 
 }

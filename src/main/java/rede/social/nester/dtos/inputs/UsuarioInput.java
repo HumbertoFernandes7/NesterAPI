@@ -11,15 +11,15 @@ import lombok.Setter;
 @Setter
 public class UsuarioInput {
 
-    @NotBlank(message = "Nome não pode ser nulo")
-    private String nome;
+	@NotBlank(message = "Nome não pode ser nulo")
+	private String nome;
 
-    @NotNull(message = "Data nascimento não pode ser nulo")
-    private LocalDate dataNascimento;
+	@NotNull(message = "Data nascimento não pode ser nulo")
+	private LocalDate dataNascimento;
 
-    @NotBlank(message = "Email não pode ser nulo")
-    private String email;
+	@NotBlank(message = "Email não pode ser nulo")
+	private String email;
 
-    @NotBlank(message = "Senha não pode ser nulo")
-    private String senha;
+	@NotBlank(message = "Senha não pode ser nulo")
+	private String senha;
 }

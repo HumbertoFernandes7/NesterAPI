@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import rede.social.nester.converts.UsuarioConvert;
 import rede.social.nester.dtos.inputs.EmailResetInput;
+import rede.social.nester.dtos.inputs.ResetSenhaInput;
 import rede.social.nester.dtos.inputs.UsuarioInput;
 import rede.social.nester.dtos.outputs.UsuarioOutput;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.services.EmailService;
+import rede.social.nester.services.HashService;
 import rede.social.nester.services.TokenService;
 import rede.social.nester.services.UsuarioService;
 
@@ -39,9 +41,12 @@ public class UsuarioController {
 
 	@Autowired
 	private TokenService tokenService;
-	
+
 	@Autowired
 	private EmailService emailService;
+
+	@Autowired
+	private HashService hashService;
 
 	@PostMapping("/cadastrar")
 	@ResponseStatus(code = HttpStatus.CREATED)
@@ -93,10 +98,18 @@ public class UsuarioController {
 		List<UsuarioEntity> usuariosEncontrado = usuarioService.buscaUsuarioPor(por);
 		return usuarioConvert.listEntityToListOutput(usuariosEncontrado);
 	}
-	
+
 	@PostMapping("/enviar-email")
 	public void enviarEmailHashRedefinirSenha(@RequestBody EmailResetInput emailReset) {
-		UsuarioEntity usuarioEncontrado =  usuarioService.buscaUsuarioPorEmail(emailReset.getEmail());
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorEmail(emailReset.getEmail());
 		emailService.enviarEmailResetSenha(usuarioEncontrado);
+	}
+
+	@PutMapping("/recuperar-senha/{hash}/{id}")
+	public void recuperarSenhaComHash(@PathVariable String hash, @PathVariable Long id,
+			@RequestBody ResetSenhaInput resetSenhaInput) {
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+		hashService.validarHash(hash);
+		usuarioService.recuperarSenha(usuarioEncontrado, hash, resetSenhaInput);
 	}
 }

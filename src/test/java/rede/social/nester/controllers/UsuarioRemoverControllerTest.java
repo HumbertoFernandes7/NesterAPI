@@ -43,7 +43,7 @@ public class UsuarioRemoverControllerTest {
 		mvc.created(this.uriCadastrar, this.usuarioInput);
 
 		this.token = mvc.autenticatedWithAdminToken().getToken();
-		
+
 		this.authInput = new AuthInput();
 		this.authInput.setEmail("teste@teste.com");
 		this.authInput.setSenha("123");
@@ -53,7 +53,7 @@ public class UsuarioRemoverControllerTest {
 	void quando_removerUsuario_RetornaOk() throws Exception {
 		mvc.delet(this.token, uriRemover + "2");
 	}
-	
+
 	@Test
 	void quando_removerUsuario_RetornaUnauthorized() throws Exception {
 		this.token = mvc.autenticatedWithUserAndReturnToken(authInput).getToken();

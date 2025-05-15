@@ -84,8 +84,7 @@ public class UsuarioListarControllerTest {
 	void quando_listarUsuarioPeloId_RetornaOk() throws Exception {
 		this.token = mvc.autenticatedWithAdminToken().getToken();
 		ResultActions result = mvc.find(this.token, uriPeloId + "3");
-		result.andExpect(jsonPath("$.id").value(3))
-				.andExpect(jsonPath("$.nome").value("nome teste"))
+		result.andExpect(jsonPath("$.id").value(3)).andExpect(jsonPath("$.nome").value("nome teste"))
 				.andExpect(jsonPath("$.email").value("email@hotmail.com"))
 				.andExpect(jsonPath("$.dataNascimento").value("2002-10-10"))
 				.andExpect(jsonPath("$.role").value("USER"));

@@ -27,10 +27,10 @@ public class PostagemEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "mensagem", length = 5000)
 	private String mensagem;
-	
+
 	@Column(name = "dataPostagem")
 	private LocalDateTime dataPostagem;
 
@@ -41,5 +41,5 @@ public class PostagemEntity {
 	@JoinColumn(name = "usuario_id")
 	@JsonBackReference
 	private UsuarioEntity usuario;
-	
+
 }

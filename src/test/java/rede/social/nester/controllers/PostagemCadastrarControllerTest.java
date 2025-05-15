@@ -66,8 +66,7 @@ public class PostagemCadastrarControllerTest {
 	@Test
 	void quando_cadastrarPostagem_RetornaOk() throws Exception {
 		ResultActions result = mvc.created(this.token, this.uriCadastrarPostagem, this.postagemInput);
-		result.andExpect(jsonPath("$.id").value(1))
-		.andExpect(jsonPath("$.mensagem").value("postagem xx"));
+		result.andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.mensagem").value("postagem xx"));
 	}
 
 	@Test

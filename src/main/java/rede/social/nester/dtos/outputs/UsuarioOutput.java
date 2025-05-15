@@ -10,13 +10,13 @@ import rede.social.nester.enuns.UsuarioEnum;
 @Setter
 public class UsuarioOutput {
 
-    private Long id;
+	private Long id;
 
-    private String nome;
+	private String nome;
 
-    private LocalDate dataNascimento;
+	private LocalDate dataNascimento;
 
-    private String email;
-    
-    private UsuarioEnum role;
+	private String email;
+
+	private UsuarioEnum role;
 }

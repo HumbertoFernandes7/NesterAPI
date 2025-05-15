@@ -1,6 +1,5 @@
 package rede.social.nester.controllers;
 
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,53 +21,52 @@ import rede.social.nester.dtos.inputs.PostagemInput;
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 public class PostagemListarContollerTest {
 
-    @Autowired
-    private MyMvcMock mvc;
+	@Autowired
+	private MyMvcMock mvc;
 
-    private PostagemInput postagemInput;
-    private String uriCadastrarPostagem;
-    private String uriListarPostagem;
-    private String token;
+	private PostagemInput postagemInput;
+	private String uriCadastrarPostagem;
+	private String uriListarPostagem;
+	private String token;
 
-    @BeforeEach
-    void antes() throws Exception {
+	@BeforeEach
+	void antes() throws Exception {
 
-        this.uriCadastrarPostagem = "/postagem/cadastrar";
-        this.uriListarPostagem = "/postagem/usuario";
+		this.uriCadastrarPostagem = "/postagem/cadastrar";
+		this.uriListarPostagem = "/postagem/usuario";
 
-        this.token = mvc.autenticatedWithAdminToken().getToken();
+		this.token = mvc.autenticatedWithAdminToken().getToken();
 
-        this.postagemInput = new PostagemInput();
-        postagemInput.setMensagem("postagem xx");
-        mvc.created(this.token, this.uriCadastrarPostagem, this.postagemInput);
+		this.postagemInput = new PostagemInput();
+		postagemInput.setMensagem("postagem xx");
+		mvc.created(this.token, this.uriCadastrarPostagem, this.postagemInput);
 
-        postagemInput.setMensagem("postagem xxx");
-        mvc.created(this.token, this.uriCadastrarPostagem, this.postagemInput);
+		postagemInput.setMensagem("postagem xxx");
+		mvc.created(this.token, this.uriCadastrarPostagem, this.postagemInput);
 
-    }
+	}
 
-    @Test
-    void quando_ListarPostagem_UsuarioLogado_RetornaOk() throws Exception {
-       ResultActions result = mvc.find(token, uriListarPostagem);
-        result.andExpect(jsonPath("$[0].mensagem").value("postagem xx"))
-                .andExpect(jsonPath("$[1].mensagem").value("postagem xxx"));
-    }
+	@Test
+	void quando_ListarPostagem_UsuarioLogado_RetornaOk() throws Exception {
+		ResultActions result = mvc.find(token, uriListarPostagem);
+		result.andExpect(jsonPath("$[0].mensagem").value("postagem xx"))
+				.andExpect(jsonPath("$[1].mensagem").value("postagem xxx"));
+	}
 
-    @Test
-    void quando_ListarPostagemDoUsuarioPeloId_RetornaOk() throws Exception {
-        ResultActions result = mvc.find(token, uriListarPostagem + "/2");
-        result.andExpect(jsonPath("$[0].mensagem").value("postagem xx"));
-    }
+	@Test
+	void quando_ListarPostagemDoUsuarioPeloId_RetornaOk() throws Exception {
+		ResultActions result = mvc.find(token, uriListarPostagem + "/2");
+		result.andExpect(jsonPath("$[0].mensagem").value("postagem xx"));
+	}
 
-    @Test
-    void quando_listarPostagem_SemToken_RetornaErro() throws Exception {
-        mvc.findWithForbidden(uriListarPostagem);
-    }
+	@Test
+	void quando_listarPostagem_SemToken_RetornaErro() throws Exception {
+		mvc.findWithForbidden(uriListarPostagem);
+	}
 
-    @Test
-    void quando_listarPostagemDoUsuarioPeloId_SemToken_RetornErro() throws Exception {
-        mvc.findWithForbidden(uriListarPostagem + "/2");
-    }
-
+	@Test
+	void quando_listarPostagemDoUsuarioPeloId_SemToken_RetornErro() throws Exception {
+		mvc.findWithForbidden(uriListarPostagem + "/2");
+	}
 
 }

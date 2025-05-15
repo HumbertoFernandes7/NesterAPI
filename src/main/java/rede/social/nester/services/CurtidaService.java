@@ -43,12 +43,15 @@ public class CurtidaService {
 				.orElseThrow(() -> new NotFoundBussinessException("Curtida não encontrada pelo id " + id));
 	}
 
-	public CurtidaEntity buscaCurtidaPelaPostagemAndUsuario(PostagemEntity postagemEncontrada, UsuarioEntity usuarioEncontrado) {
-		CurtidaEntity curtidaEncontrada = curtidaRepository.findByPostagemAndUsuario(postagemEncontrada, usuarioEncontrado);
-		if(curtidaEncontrada != null) {
+	public CurtidaEntity buscaCurtidaPelaPostagemAndUsuario(PostagemEntity postagemEncontrada,
+			UsuarioEntity usuarioEncontrado) {
+		CurtidaEntity curtidaEncontrada = curtidaRepository.findByPostagemAndUsuario(postagemEncontrada,
+				usuarioEncontrado);
+		if (curtidaEncontrada != null) {
 			return curtidaEncontrada;
-		}else {
-			throw new NotFoundBussinessException("Curtida não encontrada pelo usuario na postagem com id: " + postagemEncontrada.getId());
+		} else {
+			throw new NotFoundBussinessException(
+					"Curtida não encontrada pelo usuario na postagem com id: " + postagemEncontrada.getId());
 		}
 	}
 

@@ -20,18 +20,16 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CurtidaEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private UsuarioEntity usuario;
+	@ManyToOne
+	@JoinColumn(name = "usuario_id")
+	private UsuarioEntity usuario;
 
-    @ManyToOne
-    @JoinColumn(name = "postagem_id")
-    private PostagemEntity postagem;
-
-
+	@ManyToOne
+	@JoinColumn(name = "postagem_id")
+	private PostagemEntity postagem;
 
 }

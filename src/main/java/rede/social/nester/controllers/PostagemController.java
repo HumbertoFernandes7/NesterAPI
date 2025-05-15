@@ -24,7 +24,6 @@ import rede.social.nester.services.PostagemService;
 import rede.social.nester.services.TokenService;
 import rede.social.nester.services.UsuarioService;
 
-
 @RestController
 @RequestMapping("/postagem")
 public class PostagemController {
@@ -73,20 +72,19 @@ public class PostagemController {
 	}
 
 	@PutMapping("/atualizar/{id}")
-	public PostagemOutput atualizarPostagem(@RequestBody @Valid PostagemInput postagemInput,
-			@PathVariable Long id) {
+	public PostagemOutput atualizarPostagem(@RequestBody @Valid PostagemInput postagemInput, @PathVariable Long id) {
 		PostagemEntity postagemEncontrada = postagemService.buscaPostagemPeloId(id);
 		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
 		postagemEncontrada.setMensagem(postagemInput.getMensagem());
 		PostagemEntity postagemAtualizada = postagemService.atualizarPostagem(usuarioEncontrado, postagemEncontrada);
 		return postagemConvert.entityToOutput(postagemAtualizada);
 	}
-	
+
 	@GetMapping("/foryou")
 	public List<PostagemOutput> listarForYou() {
 		List<PostagemEntity> postagensEncontras = postagemService.buscaPostagensParaForYou();
 		return postagemConvert.listEntityToListOutput(postagensEncontras);
-		 
+
 	}
-	
+
 }

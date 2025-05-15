@@ -8,10 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostagemOutput {
-	
+
 	private Long id;
-	private	String mensagem;
+	private String mensagem;
 	private LocalDateTime dataPostagem;
-	
+
 	private UsuarioOutput usuario;
 }

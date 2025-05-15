@@ -11,9 +11,8 @@ import rede.social.nester.entities.UsuarioEntity;
 
 public interface PostagemRepository extends JpaRepository<PostagemEntity, Long> {
 
-    List<PostagemEntity> findAllByUsuario(UsuarioEntity usuarioEncontrado);
+	List<PostagemEntity> findAllByUsuario(UsuarioEntity usuarioEncontrado);
 
-    
-    @Query("SELECT p FROM PostagemEntity p ORDER BY p.dataPostagem DESC")
+	@Query("SELECT p FROM PostagemEntity p ORDER BY p.dataPostagem DESC")
 	List<PostagemEntity> findUltimas50Publicacoes(PageRequest page);
 }

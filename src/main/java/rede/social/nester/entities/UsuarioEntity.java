@@ -37,45 +37,46 @@ public class UsuarioEntity implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "nome")
-    private String nome;	
+	@Column(name = "nome")
+	private String nome;
 
-    @Column(name = "dataNascimento")
-    private LocalDate dataNascimento;
+	@Column(name = "dataNascimento")
+	private LocalDate dataNascimento;
 
-    @Column(name = "email", unique = true)
-    private String email;
+	@Column(name = "email", unique = true)
+	private String email;
 
-    @Column(name = "senha")
-    private String senha;
-    
-    @Column(name = "role")
-    private UsuarioEnum role;
-    
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
-    private List<PostagemEntity> postagens;
+	@Column(name = "senha")
+	private String senha;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CurtidaEntity> curtidas;
-    
-    @Column(name = "dadosCompletos", length = 500)
-    private String dadosCompletos;
-    
-    @PrePersist
-    @PreUpdate
-    private void prePersistOrUpdate() {
-        this.dadosCompletos = String.format("%s <%s>", this.nome, this.email);
-    }
+	@Column(name = "role")
+	private UsuarioEnum role;
+
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonBackReference
+	private List<PostagemEntity> postagens;
+
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CurtidaEntity> curtidas;
+
+	@Column(name = "dadosCompletos", length = 500)
+	private String dadosCompletos;
+
+	@PrePersist
+	@PreUpdate
+	private void prePersistOrUpdate() {
+		this.dadosCompletos = String.format("%s <%s>", this.nome, this.email);
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		if(this.role == UsuarioEnum.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
-				new SimpleGrantedAuthority("ROLE_USER"));
-		else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+		if (this.role == UsuarioEnum.ADMIN)
+			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+		else
+			return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
 	@Override
@@ -87,7 +88,7 @@ public class UsuarioEntity implements UserDetails {
 	public String getUsername() {
 		return this.email;
 	}
-	
+
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;

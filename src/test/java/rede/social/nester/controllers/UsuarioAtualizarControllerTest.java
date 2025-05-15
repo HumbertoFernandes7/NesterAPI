@@ -59,12 +59,11 @@ public class UsuarioAtualizarControllerTest {
 		usuarioInput.setDataNascimento(LocalDate.of(2005, 01, 10));
 		usuarioInput.setSenha("12333331");
 		ResultActions result = mvc.update(this.token, uriAtualizarUsuario, usuarioInput);
-		result.andExpect(jsonPath("$.id").value(3))
-				.andExpect(jsonPath("$.nome").value("nome2"))
+		result.andExpect(jsonPath("$.id").value(3)).andExpect(jsonPath("$.nome").value("nome2"))
 				.andExpect(jsonPath("$.email").value("teste3@teste.com"))
 				.andExpect(jsonPath("$.dataNascimento").value("2005-01-10"));
 	}
-	
+
 	@Test
 	void quando_atualizarUsuarioPeloId_RetornaOk() throws Exception {
 		this.token = mvc.autenticatedWithAdminToken().getToken();
@@ -72,9 +71,8 @@ public class UsuarioAtualizarControllerTest {
 		usuarioInput.setNome("nome2");
 		usuarioInput.setDataNascimento(LocalDate.of(2005, 01, 10));
 		usuarioInput.setSenha("12333331");
-		ResultActions result =  mvc.update(this.token, uriAtualizarUsuario + "/2", usuarioInput);
-		result.andExpect(jsonPath("$.id").value(2))
-				.andExpect(jsonPath("$.nome").value("nome2"))
+		ResultActions result = mvc.update(this.token, uriAtualizarUsuario + "/2", usuarioInput);
+		result.andExpect(jsonPath("$.id").value(2)).andExpect(jsonPath("$.nome").value("nome2"))
 				.andExpect(jsonPath("$.email").value("teste3@teste.com"))
 				.andExpect(jsonPath("$.dataNascimento").value("2005-01-10"));
 	}
@@ -119,7 +117,7 @@ public class UsuarioAtualizarControllerTest {
 		usuarioInput.setSenha("");
 		mvc.updateWithBadRequest(token, uriAtualizarUsuario, usuarioInput);
 	}
-	
+
 	@Test
 	void quando_atualizarUsuarioPeloId_semAutorizacao_RetornaUnathorized() throws Exception {
 		usuarioInput.setEmail("teste3@teste.com");

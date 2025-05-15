@@ -14,22 +14,22 @@ import rede.social.nester.entities.UsuarioEntity;
 @Component
 public class UsuarioConvert {
 
-    @Autowired
-    private ModelMapper modelMapper;
+	@Autowired
+	private ModelMapper modelMapper;
 
-    public UsuarioEntity inputToEntity(UsuarioInput usuarioInput) {
-        return modelMapper.map(usuarioInput, UsuarioEntity.class);
-    }
+	public UsuarioEntity inputToEntity(UsuarioInput usuarioInput) {
+		return modelMapper.map(usuarioInput, UsuarioEntity.class);
+	}
 
-    public UsuarioOutput entityToOutput(UsuarioEntity usuarioCadastrado) {
-        return modelMapper.map(usuarioCadastrado, UsuarioOutput.class);
-    }
+	public UsuarioOutput entityToOutput(UsuarioEntity usuarioCadastrado) {
+		return modelMapper.map(usuarioCadastrado, UsuarioOutput.class);
+	}
 
-    public List<UsuarioOutput> listEntityToListOutput(List<UsuarioEntity> listaDeUsuarios) {
-        return listaDeUsuarios.stream().map((usuario) -> entityToOutput(usuario)).collect(Collectors.toList());
-    }
+	public List<UsuarioOutput> listEntityToListOutput(List<UsuarioEntity> listaDeUsuarios) {
+		return listaDeUsuarios.stream().map((usuario) -> entityToOutput(usuario)).collect(Collectors.toList());
+	}
 
-    public void copiaInputparaEntity(UsuarioEntity usuarioEncontrado, UsuarioInput usuarioInput) {
-        modelMapper.map(usuarioInput, usuarioEncontrado);
-    }
+	public void copiaInputparaEntity(UsuarioEntity usuarioEncontrado, UsuarioInput usuarioInput) {
+		modelMapper.map(usuarioInput, usuarioEncontrado);
+	}
 }

@@ -1,9 +1,9 @@
 package rede.social.nester.services;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,17 @@ import rede.social.nester.repositories.SenhaResetHashRepository;
 @Service
 public class EmailService {
 
+	@Value("${app.frontend.url}")
+	private String frontendUrl;
+
 	@Autowired
 	private JavaMailSender mailSender;
 
 	@Autowired
 	private SenhaResetHashRepository senhaResetHashRepository;
+
+	@Autowired
+	private HashService hashService;
 
 	@Autowired
 	private EntityManager manager;
@@ -41,7 +47,7 @@ public class EmailService {
 					manager.flush();
 				}
 				// Cria novo hash
-				hashParaEnviar = criarHashResetEmail();
+				hashParaEnviar = hashService.criarHashResetEmail();
 				SenhaResetHashEntity novo = new SenhaResetHashEntity();
 				novo.setUsuario(usuario);
 				novo.setHash(hashParaEnviar);
@@ -53,34 +59,20 @@ public class EmailService {
 				hashParaEnviar = existente.getHash();
 			}
 
+			String resetLink = String.format("%s/usuarios/recuperar-senha/%s/%d", frontendUrl, hashParaEnviar, usuario.getId());
 			// Envia sempre o e-mail com o hash correto
-			enviarEmail(usuario.getEmail(), "Redefinição de senha",
-					"Seu código para redefinir a senha: " + hashParaEnviar);
+			enviarEmail(usuario.getEmail(), "Redefinição de senha", resetLink);
 
 		} catch (Exception e) {
 			throw new BadRequestBussinessException("Erro ao enviar e-mail, tente novamente mais tarde!");
 		}
 	}
 
-//	private boolean validarHashExistente(String hash) {
-//		SenhaResetHashEntity hashEncontrado = senhaResetHashRepository.findByHash(hash);
-//		LocalDateTime now = LocalDateTime.now();
-//		if (hashEncontrado != null && hashEncontrado.getDataExpiracao().isAfter(now)) {
-//			return true;
-//		} else {
-//			return false;
-//		}
-//	}	
-
-	private void enviarEmail(String destino, String assunto, String texto) {
+	public void enviarEmail(String destino, String assunto, String texto) {
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setTo(destino);
 		msg.setSubject(assunto);
 		msg.setText(texto);
 		mailSender.send(msg);
-	}
-
-	private String criarHashResetEmail() {
-		return UUID.randomUUID().toString();
 	}
 }

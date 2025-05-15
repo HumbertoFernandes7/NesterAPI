@@ -25,7 +25,7 @@ public class PostagemConvert {
 		return modelMapper.map(postagemCadastrada, PostagemOutput.class);
 	}
 
-    public List<PostagemOutput> listEntityToListOutput(List<PostagemEntity> postagemEntity) {
+	public List<PostagemOutput> listEntityToListOutput(List<PostagemEntity> postagemEntity) {
 		return postagemEntity.stream().map((postagem) -> entityToOutput(postagem)).collect(Collectors.toList());
-    }
+	}
 }

@@ -39,9 +39,9 @@ public class PostagemService {
 
 	@Transactional
 	public void removerPostagem(UsuarioEntity usuarioEncontrado, PostagemEntity postagem) {
-		if(verificaUsuarioAdminOuCriadorPublicacao(usuarioEncontrado, postagem)) {
+		if (verificaUsuarioAdminOuCriadorPublicacao(usuarioEncontrado, postagem)) {
 			postagemRepository.delete(postagem);
-		}else {
+		} else {
 			throw new UnauthorizedAccessBussinessException("Usuario não tem permissão necessária!");
 		}
 	}

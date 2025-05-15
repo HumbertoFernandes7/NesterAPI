@@ -8,7 +8,6 @@ import rede.social.nester.entities.UsuarioEntity;
 
 public interface CurtidaRepository extends JpaRepository<CurtidaEntity, Long> {
 
-
-    CurtidaEntity findByPostagemAndUsuario(PostagemEntity postagem, UsuarioEntity usuario);
+	CurtidaEntity findByPostagemAndUsuario(PostagemEntity postagem, UsuarioEntity usuario);
 
 }

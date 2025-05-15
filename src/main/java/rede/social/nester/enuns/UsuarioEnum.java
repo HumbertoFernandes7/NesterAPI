@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public enum UsuarioEnum {
 
-	ADMIN("admin"),
-	USER("user");
-	
+	ADMIN("admin"), USER("user");
+
 	private String role;
 }

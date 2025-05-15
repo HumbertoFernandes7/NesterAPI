@@ -41,7 +41,8 @@ public class CurtidaController {
 	public void removerCurtida(@PathVariable Long postagemId) {
 		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
 		PostagemEntity postagemEncontrada = postagemService.buscaPostagemPeloId(postagemId);
-		CurtidaEntity curtidaEncontrada = curtidaService.buscaCurtidaPelaPostagemAndUsuario(postagemEncontrada, usuarioEncontrado);
+		CurtidaEntity curtidaEncontrada = curtidaService.buscaCurtidaPelaPostagemAndUsuario(postagemEncontrada,
+				usuarioEncontrado);
 		curtidaService.removerCurtida(usuarioEncontrado, curtidaEncontrada);
 	}
 }

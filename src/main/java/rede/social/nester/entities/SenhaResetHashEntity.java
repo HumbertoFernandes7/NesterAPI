@@ -26,14 +26,14 @@ public class SenhaResetHashEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "hash")
 	private String hash;
-	
+
 	@Column(name = "dataExpiracao")
 	LocalDateTime dataExpiracao;
-	
+
 	@OneToOne
-	@JoinColumn(name = 	"usuario_id")
+	@JoinColumn(name = "usuario_id")
 	private UsuarioEntity usuario;
 }
