@@ -100,14 +100,14 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/enviar-email")
-	public void enviarEmailHashRedefinirSenha(@RequestBody EmailResetInput emailReset) {
+	public void enviarEmailHashRedefinirSenha(@RequestBody @Valid EmailResetInput emailReset) {
 		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorEmail(emailReset.getEmail());
 		emailService.enviarEmailResetSenha(usuarioEncontrado);
 	}
 
 	@PutMapping("/recuperar-senha/{hash}/{id}")
 	public void recuperarSenhaComHash(@PathVariable String hash, @PathVariable Long id,
-			@RequestBody ResetSenhaInput resetSenhaInput) {
+			@RequestBody @Valid ResetSenhaInput resetSenhaInput) {
 		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
 		hashService.validarHash(hash);
 		usuarioService.recuperarSenha(usuarioEncontrado, hash, resetSenhaInput);

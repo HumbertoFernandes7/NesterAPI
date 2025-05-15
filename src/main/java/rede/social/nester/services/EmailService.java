@@ -59,7 +59,7 @@ public class EmailService {
 				hashParaEnviar = existente.getHash();
 			}
 
-			String resetLink = String.format("%s/usuarios/recuperar-senha/%s/%d", frontendUrl, hashParaEnviar, usuario.getId());
+			String resetLink = String.format("%s/recuperar-senha/%s/%d", frontendUrl, hashParaEnviar, usuario.getId());
 			// Envia sempre o e-mail com o hash correto
 			enviarEmail(usuario.getEmail(), "Redefinição de senha", resetLink);
 
