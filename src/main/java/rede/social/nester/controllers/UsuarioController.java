@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import rede.social.nester.converts.UsuarioConvert;
@@ -54,6 +56,12 @@ public class UsuarioController {
 		UsuarioEntity usuarioEntity = usuarioConvert.inputToEntity(usuarioInput);
 		UsuarioEntity usuarioCadastrado = usuarioService.cadastrarUsuario(usuarioEntity);
 		return usuarioConvert.entityToOutput(usuarioCadastrado);
+	}
+	
+	@PutMapping("/foto-perfil/{id}")
+	public void atualizarFotoPerfil(@PathVariable Long id, @RequestParam("file") MultipartFile arquivo){
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+		usuarioService.atualizarFotoPerfil(arquivo, usuarioEncontrado);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")

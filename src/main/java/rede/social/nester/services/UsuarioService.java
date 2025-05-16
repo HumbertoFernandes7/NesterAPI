@@ -1,11 +1,18 @@
 package rede.social.nester.services;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 import rede.social.nester.dtos.inputs.ResetSenhaInput;
@@ -17,6 +24,9 @@ import rede.social.nester.repositories.UsuarioRepository;
 
 @Service
 public class UsuarioService {
+
+	@Value("${app.foto.perfil.caminho:/tmp/uploads}")
+	private String caminhoFotos;
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -66,6 +76,22 @@ public class UsuarioService {
 	public UsuarioEntity atualizarUsuario(UsuarioEntity usuarioEntity) {
 		usuarioEntity.setSenha(criptografarSenha(usuarioEntity.getSenha()));
 		return usuarioRepository.save(usuarioEntity);
+	}
+	
+	@Transactional
+	public void atualizarFotoPerfil(MultipartFile arquivo, UsuarioEntity usuarioEncontrado) {
+		try {
+			if (!arquivo.isEmpty()) {
+				byte[] bytes = arquivo.getBytes();
+				String nomeFoto = String.valueOf(usuarioEncontrado.getEmail()) + arquivo.getOriginalFilename();
+				Path caminho = Paths.get(caminhoFotos + nomeFoto);
+				Files.write(caminho, bytes);
+				usuarioEncontrado.setNomeFotoPerfil(nomeFoto);
+				usuarioRepository.save(usuarioEncontrado);
+			}
+		} catch (IOException | InvalidPathException ex) {
+			throw new BadRequestBussinessException("Erro ao salvar foto de perfil: " + ex);
+		}
 	}
 
 	@Transactional
