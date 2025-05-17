@@ -3,7 +3,9 @@ package rede.social.nester.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,11 +59,18 @@ public class UsuarioController {
 		UsuarioEntity usuarioCadastrado = usuarioService.cadastrarUsuario(usuarioEntity);
 		return usuarioConvert.entityToOutput(usuarioCadastrado);
 	}
-	
-	@PutMapping("/foto-perfil/{id}")
-	public void atualizarFotoPerfil(@PathVariable Long id, @RequestParam("file") MultipartFile arquivo){
+
+	@PutMapping("/atualizar/foto-perfil/{id}")
+	public void atualizarFotoPerfil(@PathVariable Long id, @RequestParam("file") MultipartFile arquivo) {
 		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
 		usuarioService.atualizarFotoPerfil(arquivo, usuarioEncontrado);
+	}
+
+	@GetMapping("/foto-perfil")
+	public ResponseEntity<byte[]> buscarFotoPerfil() {
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		byte[] fotoEmBytes = usuarioService.buscarFotoUsuario(usuarioEncontrado);
+		return ResponseEntity.ok().cacheControl(CacheControl.noCache()).body(fotoEmBytes);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")

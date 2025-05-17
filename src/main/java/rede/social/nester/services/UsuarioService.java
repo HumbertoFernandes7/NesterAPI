@@ -77,7 +77,20 @@ public class UsuarioService {
 		usuarioEntity.setSenha(criptografarSenha(usuarioEntity.getSenha()));
 		return usuarioRepository.save(usuarioEntity);
 	}
-	
+
+	public byte[] buscarFotoUsuario(UsuarioEntity usuarioEncontrado) {
+		Path caminhoFoto = Paths.get(caminhoFotos + usuarioEncontrado.getNomeFotoPerfil());
+		if (!Files.exists(caminhoFoto) || !Files.isRegularFile(caminhoFoto)) {
+			throw new BadRequestBussinessException("Foto não encontrada");
+		}
+		try {
+			return Files.readAllBytes(caminhoFoto);
+
+		} catch (IOException e) {
+			throw new BadRequestBussinessException("Erro ao ler foto" + e);
+		}
+	}
+
 	@Transactional
 	public void atualizarFotoPerfil(MultipartFile arquivo, UsuarioEntity usuarioEncontrado) {
 		try {
