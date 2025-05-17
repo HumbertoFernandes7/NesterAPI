@@ -25,7 +25,7 @@ import rede.social.nester.repositories.UsuarioRepository;
 @Service
 public class UsuarioService {
 
-	@Value("${app.foto.perfil.caminho:/tmp/uploads}")
+	@Value("${app.foto.perfil.caminho}")
 	private String caminhoFotos;
 
 	@Autowired
