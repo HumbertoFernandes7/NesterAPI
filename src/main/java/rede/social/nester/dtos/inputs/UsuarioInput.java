@@ -2,6 +2,7 @@ package rede.social.nester.dtos.inputs;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class UsuarioInput {
 	@NotNull(message = "Data nascimento não pode ser nulo")
 	private LocalDate dataNascimento;
 
+	@Email(message = "Email invalido!")
 	@NotBlank(message = "Email não pode ser nulo")
 	private String email;
 
