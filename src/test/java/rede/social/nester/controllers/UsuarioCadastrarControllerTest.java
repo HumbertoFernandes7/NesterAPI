@@ -39,7 +39,7 @@ public class UsuarioCadastrarControllerTest {
 		usuarioInput.setNome("Teste");
 		usuarioInput.setEmail("teste@teste.com");
 		usuarioInput.setDataNascimento(LocalDate.of(2002, 10, 10));
-		usuarioInput.setSenha("123");
+		usuarioInput.setSenha("123456789");
 	}
 
 	@Test
@@ -91,6 +91,12 @@ public class UsuarioCadastrarControllerTest {
 		usuarioInput.setSenha("");
 		mvc.createdWithBadRequest(uri, usuarioInput);
 	}
+	
+	@Test
+	void quando_cadastrarUsuario_SenhaMenorQue8_RetornaErro() throws Exception {
+		usuarioInput.setSenha("1234567");
+		mvc.createdWithBadRequest(uri, usuarioInput);
+	}
 
 	@Test
 	void quando_cadastrarUsuarioEmailExistente_RetornaErro() throws Exception {
@@ -99,7 +105,7 @@ public class UsuarioCadastrarControllerTest {
 		usuarioInput2.setNome("nome2");
 		usuarioInput2.setEmail("teste@teste.com");
 		usuarioInput2.setDataNascimento(LocalDate.of(2002, 10, 10));
-		usuarioInput2.setSenha("123");
+		usuarioInput2.setSenha("123456789");
 		ResultActions result = mvc.createdWithBadRequest(uri, usuarioInput);
 		result.andExpect(jsonPath("[?($.message == 'Email já cadastrado no sistema!')]").exists());
 	}

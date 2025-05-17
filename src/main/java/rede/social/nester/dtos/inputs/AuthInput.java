@@ -1,6 +1,7 @@
 package rede.social.nester.dtos.inputs;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,9 +9,10 @@ import lombok.Setter;
 @Setter
 public class AuthInput {
 
-	@NotNull(message = "Email não pode ser nulo")
+	@NotBlank(message = "Email não pode ser nulo")
 	private String email;
 
-	@NotNull(message = "Senha não pode ser nulo")
+	@Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
+	@NotBlank(message = "Senha não pode ser nulo")
 	private String senha;
 }

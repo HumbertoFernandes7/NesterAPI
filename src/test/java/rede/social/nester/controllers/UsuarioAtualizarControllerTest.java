@@ -43,12 +43,12 @@ public class UsuarioAtualizarControllerTest {
 		usuarioInput.setNome("Teste");
 		usuarioInput.setEmail("teste@teste.com");
 		usuarioInput.setDataNascimento(LocalDate.of(2002, 10, 10));
-		usuarioInput.setSenha("123");
+		usuarioInput.setSenha("123456789");
 		mvc.created(uricadastrarUsuario, usuarioInput);
 
 		this.authInput = new AuthInput();
 		this.authInput.setEmail("teste@teste.com");
-		this.authInput.setSenha("123");
+		this.authInput.setSenha("123456789");
 		this.token = mvc.autenticatedWithUserAndReturnToken(authInput).getToken();
 	}
 

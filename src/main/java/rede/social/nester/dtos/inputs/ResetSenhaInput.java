@@ -1,6 +1,7 @@
 package rede.social.nester.dtos.inputs;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,9 +9,11 @@ import lombok.Setter;
 @Setter
 public class ResetSenhaInput {
 
-	@NotNull(message = "Senha não pode ser nulo")
+	@NotBlank(message = "Senha não pode ser nulo")
+	@Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
 	private String senha;
 	
-	@NotNull(message = "Repetir senha não pode ser nulo")
+	@NotBlank(message = "Repetir senha não pode ser nulo")
+	@Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
 	private String repetirSenha;
 }

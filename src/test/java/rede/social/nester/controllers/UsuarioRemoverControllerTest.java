@@ -39,14 +39,14 @@ public class UsuarioRemoverControllerTest {
 		this.usuarioInput.setNome("Teste");
 		this.usuarioInput.setEmail("teste@teste.com");
 		this.usuarioInput.setDataNascimento(LocalDate.of(2002, 10, 10));
-		this.usuarioInput.setSenha("123");
+		this.usuarioInput.setSenha("123456789");
 		mvc.created(this.uriCadastrar, this.usuarioInput);
 
 		this.token = mvc.autenticatedWithAdminToken().getToken();
 
 		this.authInput = new AuthInput();
 		this.authInput.setEmail("teste@teste.com");
-		this.authInput.setSenha("123");
+		this.authInput.setSenha("123456789");
 	}
 
 	@Test

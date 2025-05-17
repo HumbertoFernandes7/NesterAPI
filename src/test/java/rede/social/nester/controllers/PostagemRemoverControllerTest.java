@@ -44,12 +44,12 @@ public class PostagemRemoverControllerTest {
 		usuarioInput.setNome("Teste");
 		usuarioInput.setEmail("teste@teste.com");
 		usuarioInput.setDataNascimento(LocalDate.of(2002, 10, 10));
-		usuarioInput.setSenha("123");
+		usuarioInput.setSenha("123456789");
 		mvc.created(this.uriCadastrarUsuario, this.usuarioInput);
 
 		authInput = new AuthInput();
 		authInput.setEmail("teste@teste.com");
-		authInput.setSenha("123");
+		authInput.setSenha("123456789");
 
 		this.token = mvc.autenticatedWithAdminToken().getToken();
 

@@ -43,19 +43,19 @@ public class UsuarioListarControllerTest {
 
 		this.authInput = new AuthInput();
 		this.authInput.setEmail("email@hotmail.com");
-		this.authInput.setSenha("123");
+		this.authInput.setSenha("123456789");
 
 		this.usuarioInput = new UsuarioInput();
 		this.usuarioInput.setNome("nome teste");
 		this.usuarioInput.setEmail("email@hotmail.com");
 		this.usuarioInput.setDataNascimento(LocalDate.of(2002, 10, 10));
-		this.usuarioInput.setSenha("123");
+		this.usuarioInput.setSenha("123456789");
 		mvc.created(uriCadastrar, this.usuarioInput);
 
 		this.usuarioInput.setNome("nome teste 2");
 		this.usuarioInput.setEmail("email2@hotmail.com");
 		this.usuarioInput.setDataNascimento(LocalDate.of(2002, 11, 11));
-		this.usuarioInput.setSenha("123");
+		this.usuarioInput.setSenha("123456789");
 		mvc.created(uriCadastrar, this.usuarioInput);
 
 		this.token = mvc.autenticatedWithUserAndReturnToken(authInput).getToken();
