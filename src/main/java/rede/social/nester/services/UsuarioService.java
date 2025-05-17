@@ -96,7 +96,7 @@ public class UsuarioService {
 		try {
 			if (!arquivo.isEmpty()) {
 				byte[] bytes = arquivo.getBytes();
-				String nomeFoto = String.valueOf(usuarioEncontrado.getEmail()) + arquivo.getOriginalFilename();
+				String nomeFoto = String.valueOf(usuarioEncontrado.getEmail()) + "foto-perfil.jpg";
 				Path caminho = Paths.get(caminhoFotos + nomeFoto);
 				Files.write(caminho, bytes);
 				usuarioEncontrado.setNomeFotoPerfil(nomeFoto);
