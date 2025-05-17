@@ -37,6 +37,9 @@ public class UsuarioService {
 	@Autowired
 	private HashService hashService;
 
+	@Autowired
+	private FotoService fotoService;
+
 	@Transactional
 	public UsuarioEntity cadastrarUsuario(UsuarioEntity usuarioEntity) {
 		if (verificaEmailExistente(usuarioEntity.getEmail())) {
@@ -87,7 +90,7 @@ public class UsuarioService {
 			return Files.readAllBytes(caminhoFoto);
 
 		} catch (IOException e) {
-			throw new BadRequestBussinessException("Erro ao ler foto" + e);
+			throw new BadRequestBussinessException("Erro ao ler foto: " + e);
 		}
 	}
 
@@ -95,6 +98,7 @@ public class UsuarioService {
 	public void atualizarFotoPerfil(MultipartFile arquivo, UsuarioEntity usuarioEncontrado) {
 		try {
 			if (!arquivo.isEmpty()) {
+				fotoService.verificaSeFotoJPG(arquivo);
 				byte[] bytes = arquivo.getBytes();
 				String nomeFoto = String.valueOf(usuarioEncontrado.getEmail()) + "foto-perfil.jpg";
 				Path caminho = Paths.get(caminhoFotos + nomeFoto);
@@ -129,7 +133,6 @@ public class UsuarioService {
 	}
 
 	// Metodos auxiliares
-
 	private boolean verificaEmailExistente(String email) {
 		UsuarioEntity usuarioEntity = usuarioRepository.findByEmail(email);
 		if (usuarioEntity == null) {
