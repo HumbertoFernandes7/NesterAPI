@@ -3,7 +3,6 @@ package rede.social.nester.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -66,12 +65,6 @@ public class UsuarioController {
 		usuarioService.atualizarFotoPerfil(arquivo, usuarioEncontrado);
 	}
 
-	@GetMapping("/foto-perfil")
-	public ResponseEntity<byte[]> buscarFotoPerfil() {
-		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
-		byte[] fotoEmBytes = usuarioService.buscarFotoUsuario(usuarioEncontrado);
-		return ResponseEntity.ok().cacheControl(CacheControl.noCache()).body(fotoEmBytes);
-	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/remover/{id}")
@@ -108,12 +101,26 @@ public class UsuarioController {
 		usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
 		UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
 		return usuarioConvert.entityToOutput(usuarioAtualizado);
-	}
+	}	
 
 	@GetMapping("/buscar")
 	public List<UsuarioOutput> buscaUsuarioPor(String por) {
 		List<UsuarioEntity> usuariosEncontrado = usuarioService.buscaUsuarioPor(por);
 		return usuarioConvert.listEntityToListOutput(usuariosEncontrado);
+	}
+	
+	@GetMapping("/minha/foto-perfil")
+	public ResponseEntity<byte[]> buscarFotoPerfilUsuarioLogado() {
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		byte[] fotoEmBytes = usuarioService.buscarFotoUsuario(usuarioEncontrado);
+		return ResponseEntity.ok().body(fotoEmBytes);
+	}
+
+	@GetMapping("/foto-perfil/{id}")
+	public ResponseEntity<byte[]> buscarFotoPerfilPeloId(@PathVariable Long id) {
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+		byte[] fotoEmBytes = usuarioService.buscarFotoUsuario(usuarioEncontrado);
+		return ResponseEntity.ok().body(fotoEmBytes);
 	}
 
 	@PostMapping("/enviar-email")
