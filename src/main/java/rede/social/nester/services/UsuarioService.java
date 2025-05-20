@@ -45,6 +45,7 @@ public class UsuarioService {
 		if (verificaEmailExistente(usuarioEntity.getEmail())) {
 			usuarioEntity.setSenha(criptografarSenha(usuarioEntity.getSenha()));
 			usuarioEntity.setRole(UsuarioEnum.USER);
+			usuarioEntity.setNomeFotoPerfil("padrao.jpg");
 			return usuarioRepository.save(usuarioEntity);
 		} else {
 			throw new BadRequestBussinessException("Email já cadastrado no sistema!");
@@ -130,6 +131,12 @@ public class UsuarioService {
 		} else {
 			throw new BadRequestBussinessException("Senha e Repetir senha são diferentes");
 		}
+	}
+
+	public List<UsuarioEntity> recomendarUsuarios() {
+		PageRequest page = PageRequest.of(0, 4);
+		List<UsuarioEntity> recomendados = usuarioRepository.findAll(page).getContent();
+		return recomendados;
 	}
 
 	// Metodos auxiliares

@@ -136,4 +136,11 @@ public class UsuarioController {
 		hashService.validarHash(hash);
 		usuarioService.recuperarSenha(usuarioEncontrado, hash, resetSenhaInput);
 	}
+	
+	@GetMapping("/recomendados")
+	public List<UsuarioOutput> recomendarUsuarios() {
+		List<UsuarioEntity> usuariosEncontrados = usuarioService.recomendarUsuarios();
+		List<UsuarioOutput> usuariosOutputs = usuarioConvert.listEntityToListOutput(usuariosEncontrados);
+		return usuariosOutputs;
+	}
 }

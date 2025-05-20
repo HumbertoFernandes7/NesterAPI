@@ -3,6 +3,7 @@ package rede.social.nester.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.services.CurtidaService;
 import rede.social.nester.services.PostagemService;
 import rede.social.nester.services.TokenService;
+
 
 @RestController
 @RequestMapping("/curtida")
@@ -44,5 +46,12 @@ public class CurtidaController {
 		CurtidaEntity curtidaEncontrada = curtidaService.buscaCurtidaPelaPostagemAndUsuario(postagemEncontrada,
 				usuarioEncontrado);
 		curtidaService.removerCurtida(usuarioEncontrado, curtidaEncontrada);
+	}
+	
+	@GetMapping("/quantidade/{postagemId}")
+	public int buscarQuantidadeCurtidasNaPublicacao(@PathVariable Long postagemId) {
+		PostagemEntity postagemEncontrada = postagemService.buscaPostagemPeloId(postagemId);
+		int quantidadeEncontrada = curtidaService.buscarQuantidadeCurtidasNaPublicacao(postagemEncontrada);
+		return quantidadeEncontrada;
 	}
 }

@@ -1,5 +1,7 @@
 package rede.social.nester.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +55,11 @@ public class CurtidaService {
 			throw new NotFoundBussinessException(
 					"Curtida não encontrada pelo usuario na postagem com id: " + postagemEncontrada.getId());
 		}
+	}
+	
+	public int buscarQuantidadeCurtidasNaPublicacao(PostagemEntity postagemEncontrada) {
+		List<CurtidaEntity> curtidas = curtidaRepository.findAllByPostagem(postagemEncontrada);
+		return curtidas.size();
 	}
 
 	// metodos auxiliares
