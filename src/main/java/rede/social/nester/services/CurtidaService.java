@@ -56,11 +56,6 @@ public class CurtidaService {
 					"Curtida não encontrada pelo usuario na postagem com id: " + postagemEncontrada.getId());
 		}
 	}
-	
-	public int buscarQuantidadeCurtidasNaPublicacao(PostagemEntity postagemEncontrada) {
-		List<CurtidaEntity> curtidas = curtidaRepository.findAllByPostagem(postagemEncontrada);
-		return curtidas.size();
-	}
 
 	// metodos auxiliares
 
@@ -70,5 +65,9 @@ public class CurtidaService {
 			return true;
 		} else
 			return false;
+	}
+
+	public List<CurtidaEntity> buscarMinhasCurtidas(UsuarioEntity usuarioEncontrado) {
+		return curtidaRepository.findAllByUsuario(usuarioEncontrado);	
 	}
 }

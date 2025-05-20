@@ -1,5 +1,7 @@
 package rede.social.nester.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,12 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import rede.social.nester.converts.CurtidaConvert;
+import rede.social.nester.dtos.outputs.CurtidaOutput;
 import rede.social.nester.entities.CurtidaEntity;
 import rede.social.nester.entities.PostagemEntity;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.services.CurtidaService;
 import rede.social.nester.services.PostagemService;
 import rede.social.nester.services.TokenService;
+
 
 
 @RestController
@@ -27,6 +32,9 @@ public class CurtidaController {
 
 	@Autowired
 	private CurtidaService curtidaService;
+	
+	@Autowired
+	private CurtidaConvert curtidaConvert;
 
 	@Autowired
 	private TokenService tokenService;
@@ -48,10 +56,11 @@ public class CurtidaController {
 		curtidaService.removerCurtida(usuarioEncontrado, curtidaEncontrada);
 	}
 	
-	@GetMapping("/quantidade/{postagemId}")
-	public int buscarQuantidadeCurtidasNaPublicacao(@PathVariable Long postagemId) {
-		PostagemEntity postagemEncontrada = postagemService.buscaPostagemPeloId(postagemId);
-		int quantidadeEncontrada = curtidaService.buscarQuantidadeCurtidasNaPublicacao(postagemEncontrada);
-		return quantidadeEncontrada;
+	@GetMapping("/minhas")
+	public List<CurtidaOutput> buscarMinhasCurtidas() {
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		List<CurtidaEntity> curtidas = curtidaService.buscarMinhasCurtidas(usuarioEncontrado);
+		return curtidaConvert.listEntityToListOutput(curtidas);
 	}
+	
 }

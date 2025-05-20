@@ -51,6 +51,8 @@ public class UsuarioController {
 	@Autowired
 	private HashService hashService;
 
+	// PostMapping
+
 	@PostMapping("/cadastrar")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public UsuarioOutput cadastrarUsuario(@RequestBody @Valid UsuarioInput usuarioInput) {
@@ -59,18 +61,18 @@ public class UsuarioController {
 		return usuarioConvert.entityToOutput(usuarioCadastrado);
 	}
 
-	@PutMapping("/atualizar/foto-perfil/{id}")
-	public void atualizarFotoPerfil(@PathVariable Long id, @RequestParam("file") MultipartFile arquivo) {
-		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
-		usuarioService.atualizarFotoPerfil(arquivo, usuarioEncontrado);
+	@PostMapping("/enviar-email")
+	public void enviarEmailHashRedefinirSenha(@RequestBody @Valid EmailResetInput emailReset) {
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorEmail(emailReset.getEmail());
+		emailService.enviarEmailResetSenha(usuarioEncontrado);
 	}
 
+	// GetMapping
 
-	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping("/remover/{id}")
-	public void removerUsuario(@PathVariable Long id) {
-		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
-		usuarioService.removerUsuario(usuarioEncontrado);
+	@GetMapping("/logado")
+	public UsuarioOutput buscarDadosUsuariaLogado() {
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		return usuarioConvert.entityToOutput(usuarioEncontrado);
 	}
 
 	@GetMapping("/listar-todos")
@@ -86,29 +88,19 @@ public class UsuarioController {
 		return usuarioConvert.entityToOutput(usuarioEncontrado);
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
-	@PutMapping("/atualizar/{id}")
-	public UsuarioOutput atualizarUsuarioPeloId(@RequestBody @Valid UsuarioInput usuarioInput, @PathVariable Long id) {
-		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
-		usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
-		UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
-		return usuarioConvert.entityToOutput(usuarioAtualizado);
+	@GetMapping("/recomendados")
+	public List<UsuarioOutput> recomendarUsuarios() {
+		List<UsuarioEntity> usuariosEncontrados = usuarioService.recomendarUsuarios();
+		List<UsuarioOutput> usuariosOutputs = usuarioConvert.listEntityToListOutput(usuariosEncontrados);
+		return usuariosOutputs;
 	}
-
-	@PutMapping("/atualizar")
-	public UsuarioOutput atualizarUsuarioPeloToken(@RequestBody @Valid UsuarioInput usuarioInput) {
-		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
-		usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
-		UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
-		return usuarioConvert.entityToOutput(usuarioAtualizado);
-	}	
 
 	@GetMapping("/buscar")
 	public List<UsuarioOutput> buscaUsuarioPor(String por) {
 		List<UsuarioEntity> usuariosEncontrado = usuarioService.buscaUsuarioPor(por);
 		return usuarioConvert.listEntityToListOutput(usuariosEncontrado);
 	}
-	
+
 	@GetMapping("/minha/foto-perfil")
 	public ResponseEntity<byte[]> buscarFotoPerfilUsuarioLogado() {
 		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
@@ -123,10 +115,29 @@ public class UsuarioController {
 		return ResponseEntity.ok().body(fotoEmBytes);
 	}
 
-	@PostMapping("/enviar-email")
-	public void enviarEmailHashRedefinirSenha(@RequestBody @Valid EmailResetInput emailReset) {
-		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorEmail(emailReset.getEmail());
-		emailService.enviarEmailResetSenha(usuarioEncontrado);
+	// PutMapping
+	
+	@PutMapping("/atualizar/foto-perfil/{id}")
+	public void atualizarFotoPerfil(@PathVariable Long id, @RequestParam("file") MultipartFile arquivo) {
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+		usuarioService.atualizarFotoPerfil(arquivo, usuarioEncontrado);
+	}
+
+	@PutMapping("/atualizar")
+	public UsuarioOutput atualizarUsuarioPeloToken(@RequestBody @Valid UsuarioInput usuarioInput) {
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
+		UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
+		return usuarioConvert.entityToOutput(usuarioAtualizado);
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@PutMapping("/atualizar/{id}")
+	public UsuarioOutput atualizarUsuarioPeloId(@RequestBody @Valid UsuarioInput usuarioInput, @PathVariable Long id) {
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+		usuarioConvert.copiaInputparaEntity(usuarioEncontrado, usuarioInput);
+		UsuarioEntity usuarioAtualizado = usuarioService.atualizarUsuario(usuarioEncontrado);
+		return usuarioConvert.entityToOutput(usuarioAtualizado);
 	}
 
 	@PutMapping("/recuperar-senha/{hash}/{id}")
@@ -136,11 +147,13 @@ public class UsuarioController {
 		hashService.validarHash(hash);
 		usuarioService.recuperarSenha(usuarioEncontrado, hash, resetSenhaInput);
 	}
+
+	// DeleteMapping
 	
-	@GetMapping("/recomendados")
-	public List<UsuarioOutput> recomendarUsuarios() {
-		List<UsuarioEntity> usuariosEncontrados = usuarioService.recomendarUsuarios();
-		List<UsuarioOutput> usuariosOutputs = usuarioConvert.listEntityToListOutput(usuariosEncontrados);
-		return usuariosOutputs;
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/remover/{id}")
+	public void removerUsuario(@PathVariable Long id) {
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+		usuarioService.removerUsuario(usuarioEncontrado);
 	}
 }

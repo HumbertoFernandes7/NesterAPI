@@ -14,4 +14,6 @@ public interface CurtidaRepository extends JpaRepository<CurtidaEntity, Long> {
 
 	List<CurtidaEntity> findAllByPostagem(PostagemEntity postagemEncontrada);
 
+	List<CurtidaEntity> findAllByUsuario(UsuarioEntity usuarioEncontrado);
+
 }

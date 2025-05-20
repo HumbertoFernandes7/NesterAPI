@@ -49,6 +49,12 @@ public class PostagemController {
 		PostagemEntity postagemCadastrada = postagemService.cadastraPostagem(postagemEntity);
 		return postagemConvert.entityToOutput(postagemCadastrada);
 	}
+	
+	@GetMapping("{id}")
+	public PostagemOutput buscarPostagemPeloId(@PathVariable Long id) {
+		PostagemEntity postagemEntity = postagemService.buscaPostagemPeloId(id);
+		return postagemConvert.entityToOutput(postagemEntity);
+	}
 
 	@GetMapping("/usuario/{id}")
 	public List<PostagemOutput> listarPostagemDoUsuarioPeloId(@PathVariable Long id) {
@@ -58,9 +64,10 @@ public class PostagemController {
 	}
 
 	@GetMapping("/usuario")
-	public List<PostagemOutput> listarPostagemDoUsuarioLogado() {
+	public List<PostagemOutput> listarPostagensDoUsuarioLogado() {
 		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
 		List<PostagemEntity> postagemEntity = postagemService.buscaPostagemDoUsuario(usuarioEncontrado);
+	//	postagemService.verificarQuantidadeCurtidas(postagemEntity);
 		return postagemConvert.listEntityToListOutput(postagemEntity);
 	}
 
@@ -86,5 +93,4 @@ public class PostagemController {
 		return postagemConvert.listEntityToListOutput(postagensEncontras);
 
 	}
-
 }
