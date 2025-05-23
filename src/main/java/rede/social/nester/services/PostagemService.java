@@ -29,7 +29,7 @@ public class PostagemService {
 	}
 
 	public List<PostagemEntity> buscaPostagemDoUsuario(UsuarioEntity usuarioEncontrado) {
-		return postagemRepository.findAllByUsuario(usuarioEncontrado);
+		return postagemRepository.findAllByUsuarioOrderByDataPostagemDesc(usuarioEncontrado);
 	}
 
 	public PostagemEntity buscaPostagemPeloId(Long id) {
