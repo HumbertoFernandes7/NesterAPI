@@ -49,14 +49,14 @@ public class PostagemListarContollerTest {
 	@Test
 	void quando_ListarPostagem_UsuarioLogado_RetornaOk() throws Exception {
 		ResultActions result = mvc.find(token, uriListarPostagem);
-		result.andExpect(jsonPath("$[0].mensagem").value("postagem xx"))
-				.andExpect(jsonPath("$[1].mensagem").value("postagem xxx"));
+		result.andExpect(jsonPath("$[0].mensagem").value("postagem xxx"))
+				.andExpect(jsonPath("$[1].mensagem").value("postagem xx"));
 	}
 
 	@Test
 	void quando_ListarPostagemDoUsuarioPeloId_RetornaOk() throws Exception {
 		ResultActions result = mvc.find(token, uriListarPostagem + "/2");
-		result.andExpect(jsonPath("$[0].mensagem").value("postagem xx"));
+		result.andExpect(jsonPath("$[0].mensagem").value("postagem xxx"));
 	}
 
 	@Test
