@@ -44,4 +44,8 @@ public class FollowService {
 	public List<SeguidorEntity> listarFollowers(UsuarioEntity usuarioEncontrado) {
 		return seguidorRepository.findBySeguidor(usuarioEncontrado);
 	}
+
+	public boolean verificarSeguidor(UsuarioEntity usuarioLogado, UsuarioEntity usuarioEncontrado) {
+		return seguidorRepository.existsById(new SeguidorId(usuarioLogado.getId(), usuarioEncontrado.getId()));
+	}
 }
