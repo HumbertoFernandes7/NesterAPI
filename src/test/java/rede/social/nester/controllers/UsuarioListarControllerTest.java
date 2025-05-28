@@ -94,7 +94,7 @@ public class UsuarioListarControllerTest {
 	void quando_listarUsuarioPeloId_SemToken_RetornaErro() throws Exception {
 		mvc.findWithForbidden(uriBuscar + "/3");
 	}
-	
+
 	@Test
 	void quando_listarUsuarioPorString_RetornaOk() throws Exception {
 		ResultActions result = mvc.find(this.token, this.uriBuscar + "?por=humb");
@@ -103,9 +103,9 @@ public class UsuarioListarControllerTest {
 		result.andExpect(jsonPath("$[0].dataNascimento").value("2002-08-27"));
 		result.andExpect(jsonPath("$[0].role").value("ADMIN"));
 	}
-	
+
 	@Test
 	void quando_listarUsuarioPorString_SemToken_RetornaErro() throws Exception {
-		 mvc.findWithForbidden(this.uriBuscar + "?por=humb");
+		mvc.findWithForbidden(this.uriBuscar + "?por=humb");
 	}
 }

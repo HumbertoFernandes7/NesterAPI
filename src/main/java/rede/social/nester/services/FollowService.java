@@ -41,8 +41,12 @@ public class FollowService {
 		}
 	}
 
-	public List<SeguidorEntity> listarFollowers(UsuarioEntity usuarioEncontrado) {
+	public List<SeguidorEntity> listarFollowing(UsuarioEntity usuarioEncontrado) {
 		return seguidorRepository.findBySeguidor(usuarioEncontrado);
+	}
+
+	public List<SeguidorEntity> listarMyFollowers(UsuarioEntity usuarioEncontrado) {
+		return seguidorRepository.findBySeguido(usuarioEncontrado);
 	}
 
 	public boolean verificarSeguidor(UsuarioEntity usuarioLogado, UsuarioEntity usuarioEncontrado) {

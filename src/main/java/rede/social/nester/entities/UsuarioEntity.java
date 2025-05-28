@@ -54,7 +54,7 @@ public class UsuarioEntity implements UserDetails {
 
 	@Column(name = "role")
 	private UsuarioEnum role;
-	
+
 	@Column(name = "nomeFotoPerfil")
 	private String nomeFotoPerfil;
 

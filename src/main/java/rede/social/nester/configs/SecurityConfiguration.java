@@ -30,7 +30,7 @@ public class SecurityConfiguration {
 
 	@Value("${app.frontend.url}")
 	private String frontendUrl;
-	
+
 	@Autowired
 	private SecurityFilter securityFilter;
 

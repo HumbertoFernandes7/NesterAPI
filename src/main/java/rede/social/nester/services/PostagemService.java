@@ -1,6 +1,7 @@
 package rede.social.nester.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import rede.social.nester.entities.PostagemEntity;
+import rede.social.nester.entities.SeguidorEntity;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.enuns.UsuarioEnum;
 import rede.social.nester.exceptions.NotFoundBussinessException;
@@ -21,6 +23,9 @@ public class PostagemService {
 
 	@Autowired
 	private PostagemRepository postagemRepository;
+
+	@Autowired
+	private FollowService followService;
 
 	@Transactional
 	public PostagemEntity cadastraPostagem(PostagemEntity postagemEntity) {
@@ -59,6 +64,17 @@ public class PostagemService {
 		PageRequest page = PageRequest.of(0, 50, Sort.by("dataPostagem").descending());
 		List<PostagemEntity> ultimas50Publicações = postagemRepository.findUltimas50Publicacoes(page);
 		return ultimas50Publicações;
+	}
+
+	public List<PostagemEntity> listarPostagemSeguidos(UsuarioEntity usuarioEncontrado) {
+		List<PostagemEntity> postagens = new ArrayList<PostagemEntity>();
+
+		List<SeguidorEntity> seguidosEncontrados = followService.listarFollowing(usuarioEncontrado);
+
+		for (SeguidorEntity seguidorEntity : seguidosEncontrados) {
+			postagens.addAll(postagemRepository.findAllByUsuarioOrderByDataPostagemDesc(seguidorEntity.getSeguido()));
+		}
+		return postagens;
 	}
 
 	private boolean verificaUsuarioAdminOuCriadorPublicacao(UsuarioEntity usuarioEncontrado, PostagemEntity postagem) {

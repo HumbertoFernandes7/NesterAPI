@@ -91,7 +91,7 @@ public class UsuarioCadastrarControllerTest {
 		usuarioInput.setSenha("");
 		mvc.createdWithBadRequest(uri, usuarioInput);
 	}
-	
+
 	@Test
 	void quando_cadastrarUsuario_SenhaMenorQue8_RetornaErro() throws Exception {
 		usuarioInput.setSenha("1234567");

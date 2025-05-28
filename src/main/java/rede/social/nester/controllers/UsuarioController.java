@@ -115,7 +115,7 @@ public class UsuarioController {
 	}
 
 	// PutMapping
-	
+
 	@PutMapping("/atualizar/foto-perfil/{id}")
 	public void atualizarFotoPerfil(@PathVariable Long id, @RequestParam("file") MultipartFile arquivo) {
 		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
@@ -148,7 +148,7 @@ public class UsuarioController {
 	}
 
 	// DeleteMapping
-	
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/remover/{id}")
 	public void removerUsuario(@PathVariable Long id) {

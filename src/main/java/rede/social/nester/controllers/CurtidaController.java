@@ -21,8 +21,6 @@ import rede.social.nester.services.CurtidaService;
 import rede.social.nester.services.PostagemService;
 import rede.social.nester.services.TokenService;
 
-
-
 @RestController
 @RequestMapping("/curtida")
 public class CurtidaController {
@@ -32,7 +30,7 @@ public class CurtidaController {
 
 	@Autowired
 	private CurtidaService curtidaService;
-	
+
 	@Autowired
 	private CurtidaConvert curtidaConvert;
 
@@ -55,12 +53,12 @@ public class CurtidaController {
 				usuarioEncontrado);
 		curtidaService.removerCurtida(usuarioEncontrado, curtidaEncontrada);
 	}
-	
+
 	@GetMapping("/minhas")
 	public List<CurtidaOutput> buscarMinhasCurtidas() {
 		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
 		List<CurtidaEntity> curtidas = curtidaService.buscarMinhasCurtidas(usuarioEncontrado);
 		return curtidaConvert.listEntityToListOutput(curtidas);
 	}
-	
+
 }

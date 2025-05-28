@@ -40,6 +40,8 @@ public class PostagemController {
 	@Autowired
 	private TokenService tokenService;
 
+	// postmapping
+
 	@PostMapping("/cadastrar")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public PostagemOutput cadastrarPostagem(@RequestBody @Valid PostagemInput postagemInput) {
@@ -49,7 +51,9 @@ public class PostagemController {
 		PostagemEntity postagemCadastrada = postagemService.cadastraPostagem(postagemEntity);
 		return postagemConvert.entityToOutput(postagemCadastrada);
 	}
-	
+
+	// getMapping
+
 	@GetMapping("{id}")
 	public PostagemOutput buscarPostagemPeloId(@PathVariable Long id) {
 		PostagemEntity postagemEntity = postagemService.buscaPostagemPeloId(id);
@@ -63,20 +67,28 @@ public class PostagemController {
 		return postagemConvert.listEntityToListOutput(postagemEntity);
 	}
 
+	@GetMapping("/foryou")
+	public List<PostagemOutput> listarForYou() {
+		List<PostagemEntity> postagensEncontras = postagemService.buscaPostagensParaForYou();
+		return postagemConvert.listEntityToListOutput(postagensEncontras);
+	}
+
+	@GetMapping("/follow")
+	public List<PostagemOutput> listarPostagemSeguidos() {
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		List<PostagemEntity> postagens = postagemService.listarPostagemSeguidos(usuarioEncontrado);
+		return postagemConvert.listEntityToListOutput(postagens);
+	}
+
 	@GetMapping("/usuario")
 	public List<PostagemOutput> listarPostagensDoUsuarioLogado() {
 		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
 		List<PostagemEntity> postagemEntity = postagemService.buscaPostagemDoUsuario(usuarioEncontrado);
-	//	postagemService.verificarQuantidadeCurtidas(postagemEntity);
+		// postagemService.verificarQuantidadeCurtidas(postagemEntity);
 		return postagemConvert.listEntityToListOutput(postagemEntity);
 	}
 
-	@DeleteMapping("/remover/{id}")
-	public void removerPostagemUsuarioLogado(@PathVariable Long id) {
-		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
-		PostagemEntity postagem = postagemService.buscaPostagemPeloId(id);
-		postagemService.removerPostagem(usuarioEncontrado, postagem);
-	}
+	// putMapping
 
 	@PutMapping("/atualizar/{id}")
 	public PostagemOutput atualizarPostagem(@RequestBody @Valid PostagemInput postagemInput, @PathVariable Long id) {
@@ -87,10 +99,12 @@ public class PostagemController {
 		return postagemConvert.entityToOutput(postagemAtualizada);
 	}
 
-	@GetMapping("/foryou")
-	public List<PostagemOutput> listarForYou() {
-		List<PostagemEntity> postagensEncontras = postagemService.buscaPostagensParaForYou();
-		return postagemConvert.listEntityToListOutput(postagensEncontras);
+	// deleteMapping
 
+	@DeleteMapping("/remover/{id}")
+	public void removerPostagemUsuarioLogado(@PathVariable Long id) {
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		PostagemEntity postagem = postagemService.buscaPostagemPeloId(id);
+		postagemService.removerPostagem(usuarioEncontrado, postagem);
 	}
 }

@@ -26,17 +26,17 @@ public class SeguidorEntity {
 
 	@EmbeddedId
 	private SeguidorId id;
-	
+
 	@ManyToOne
 	@MapsId("seguidorId")
 	@JoinColumn(name = "seguidor_Id")
 	private UsuarioEntity seguidor;
-	
+
 	@ManyToOne
 	@MapsId("seguidoId")
 	@JoinColumn(name = "seguido_Id")
 	private UsuarioEntity seguido;
-	
+
 	@Column(name = "dataSeguimento")
 	private LocalDateTime dataSeguimento;
 }

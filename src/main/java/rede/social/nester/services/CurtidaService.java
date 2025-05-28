@@ -68,6 +68,6 @@ public class CurtidaService {
 	}
 
 	public List<CurtidaEntity> buscarMinhasCurtidas(UsuarioEntity usuarioEncontrado) {
-		return curtidaRepository.findAllByUsuario(usuarioEncontrado);	
+		return curtidaRepository.findAllByUsuario(usuarioEncontrado);
 	}
 }

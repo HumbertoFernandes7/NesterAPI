@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 public class EmailResetInput {
 
-	
 	@Email(message = "Email invalido!")
 	@NotBlank(message = "Email não pode ser nulo")
 	private String email;

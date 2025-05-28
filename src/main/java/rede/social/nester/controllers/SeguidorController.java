@@ -18,14 +18,13 @@ import rede.social.nester.services.FollowService;
 import rede.social.nester.services.TokenService;
 import rede.social.nester.services.UsuarioService;
 
-
 @RestController
 @RequestMapping("/follow")
 public class SeguidorController {
 
 	@Autowired
 	private TokenService tokenService;
-	
+
 	@Autowired
 	private UsuarioService usuarioService;
 
@@ -43,13 +42,20 @@ public class SeguidorController {
 		return ResponseEntity.ok(mensagem);
 	}
 
-	@GetMapping("/listar-seguidores")
-	public List<SeguidorOutput> listarFollowers() {
+	@GetMapping("/listar-seguidos")
+	public List<SeguidorOutput> listarFollowing() {
 		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
-		List<SeguidorEntity> seguidores = followService.listarFollowers(usuarioEncontrado);
+		List<SeguidorEntity> seguidores = followService.listarFollowing(usuarioEncontrado);
 		return followConvert.listEntityToListOutput(seguidores);
 	}
-	
+
+	@GetMapping("/listar-meus-seguidores")
+	public List<SeguidorOutput> listarMyFollowers() {
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		List<SeguidorEntity> seguidores = followService.listarMyFollowers(usuarioEncontrado);
+		return followConvert.listEntityToListOutput(seguidores);
+	}
+
 	@GetMapping("/is-follow/{id}")
 	public ResponseEntity<Boolean> verificarSeguidor(@PathVariable Long id) {
 		UsuarioEntity usuarioLogado = tokenService.buscaUsuarioPeloToken();
@@ -57,5 +63,5 @@ public class SeguidorController {
 		boolean isFollow = followService.verificarSeguidor(usuarioLogado, usuarioEncontrado);
 		return ResponseEntity.ok(isFollow);
 	}
-	
+
 }
