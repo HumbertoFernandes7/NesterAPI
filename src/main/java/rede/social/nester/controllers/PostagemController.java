@@ -69,7 +69,7 @@ public class PostagemController {
 
 	@GetMapping("/foryou")
 	public List<PostagemOutput> listarForYou() {
-		List<PostagemEntity> postagensEncontras = postagemService.buscaPostagensParaForYou();
+		List<PostagemEntity> postagensEncontras = postagemService.buscarPostagensParaForYou();
 		return postagemConvert.listEntityToListOutput(postagensEncontras);
 	}
 

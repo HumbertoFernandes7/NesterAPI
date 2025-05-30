@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -19,6 +20,7 @@ public class FollowService {
 	private SeguidorRepository seguidorRepository;
 
 	@Autowired
+	@Lazy
 	private UsuarioService usuarioService;
 
 	@Transactional

@@ -89,7 +89,8 @@ public class UsuarioController {
 
 	@GetMapping("/recomendados")
 	public List<UsuarioOutput> recomendarUsuarios() {
-		List<UsuarioEntity> usuariosEncontrados = usuarioService.recomendarUsuarios();
+		UsuarioEntity usuarioEncontrado = tokenService.buscaUsuarioPeloToken();
+		List<UsuarioEntity> usuariosEncontrados = usuarioService.recomendarUsuarios(usuarioEncontrado);
 		List<UsuarioOutput> usuariosOutputs = usuarioConvert.listEntityToListOutput(usuariosEncontrados);
 		return usuariosOutputs;
 	}

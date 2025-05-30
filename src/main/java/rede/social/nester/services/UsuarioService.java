@@ -6,6 +6,8 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 import rede.social.nester.dtos.inputs.ResetSenhaInput;
+import rede.social.nester.entities.SeguidorEntity;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.enuns.UsuarioEnum;
 import rede.social.nester.exceptions.BadRequestBussinessException;
@@ -30,6 +33,9 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+
+	@Autowired
+	private FollowService followService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -133,10 +139,15 @@ public class UsuarioService {
 		}
 	}
 
-	public List<UsuarioEntity> recomendarUsuarios() {
-		PageRequest page = PageRequest.of(0, 4);
-		List<UsuarioEntity> recomendados = usuarioRepository.findAll(page).getContent();
-		return recomendados;
+	public List<UsuarioEntity> recomendarUsuarios(UsuarioEntity usuarioEncontrado) {
+		List<UsuarioEntity> usuarios = usuarioRepository.findAll();
+		usuarios.remove(usuarioEncontrado);
+
+		Set<UsuarioEntity> usuariosSeguidos = followService.listarFollowing(usuarioEncontrado).stream()
+				.map(SeguidorEntity::getSeguido).collect(Collectors.toSet());
+		usuarios.removeIf(seguido -> usuariosSeguidos.contains(seguido));
+
+		return usuarios.stream().limit(4).collect(Collectors.toList());
 	}
 
 	// Metodos auxiliares

@@ -60,10 +60,10 @@ public class PostagemService {
 		}
 	}
 
-	public List<PostagemEntity> buscaPostagensParaForYou() {
-		PageRequest page = PageRequest.of(0, 50, Sort.by("dataPostagem").descending());
-		List<PostagemEntity> ultimas50Publicações = postagemRepository.findUltimas50Publicacoes(page);
-		return ultimas50Publicações;
+	public List<PostagemEntity> buscarPostagensParaForYou() {
+		PageRequest page = PageRequest.of(0, 100, Sort.by("dataPostagem").descending());
+		List<PostagemEntity> ultimasPublicações = postagemRepository.findUltimasPublicacoes(page);
+		return ultimasPublicações;
 	}
 
 	public List<PostagemEntity> listarPostagemSeguidos(UsuarioEntity usuarioEncontrado) {
