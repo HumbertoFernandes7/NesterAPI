@@ -5,7 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -148,6 +150,15 @@ public class UsuarioService {
 		usuarios.removeIf(seguido -> usuariosSeguidos.contains(seguido));
 
 		return usuarios.stream().limit(4).collect(Collectors.toList());
+	}
+	
+	public Map<String, Integer> buscarQuantidadeSeguidoresESeguidos(UsuarioEntity usuarioEncontrado) {
+		Map<String, Integer> resultado = new HashMap<>();
+		List<SeguidorEntity> following = followService.listarFollowing(usuarioEncontrado);
+		List<SeguidorEntity> myFollowers = followService.listarMyFollowers(usuarioEncontrado);
+		resultado.put("seguindo", following.size());
+		resultado.put("seguidores", myFollowers.size());
+		return resultado;
 	}
 
 	// Metodos auxiliares

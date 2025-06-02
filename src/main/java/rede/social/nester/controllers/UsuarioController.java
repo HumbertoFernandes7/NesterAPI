@@ -1,6 +1,7 @@
 package rede.social.nester.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -113,6 +114,12 @@ public class UsuarioController {
 		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
 		byte[] fotoEmBytes = usuarioService.buscarFotoUsuario(usuarioEncontrado);
 		return ResponseEntity.ok().body(fotoEmBytes);
+	}
+	
+	@GetMapping("/quantidade-seguidores-e-seguidos/{id}")
+	public Map<String, Integer> buscarQuantidadeSeguidoresESeguidos(@PathVariable Long id){
+		UsuarioEntity usuarioEncontrado = usuarioService.buscaUsuarioPorId(id);
+		return usuarioService.buscarQuantidadeSeguidoresESeguidos(usuarioEncontrado);
 	}
 
 	// PutMapping
