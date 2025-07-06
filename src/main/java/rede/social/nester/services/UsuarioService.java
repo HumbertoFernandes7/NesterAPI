@@ -24,7 +24,7 @@ import rede.social.nester.entities.SeguidorEntity;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.enuns.UsuarioEnum;
 import rede.social.nester.exceptions.BadRequestBussinessException;
-import rede.social.nester.exceptions.NotFoundBussinessException;
+import rede.social.nester.exceptions.NotFoundBusinessException;
 import rede.social.nester.repositories.UsuarioRepository;
 
 @Service
@@ -62,12 +62,12 @@ public class UsuarioService {
 
 	public UsuarioEntity buscaUsuarioPorId(Long id) {
 		return usuarioRepository.findById(id)
-				.orElseThrow(() -> new NotFoundBussinessException("Usuario não encontrado!"));
+				.orElseThrow(() -> new NotFoundBusinessException("Usuario não encontrado!"));
 	}
 
 	public UsuarioEntity buscaUsuarioPorEmail(String email) {
 		return usuarioRepository.findUsuarioByEmail(email)
-				.orElseThrow(() -> new NotFoundBussinessException("Email não encontrado!"));
+				.orElseThrow(() -> new NotFoundBusinessException("Email não encontrado!"));
 	}
 
 	public List<UsuarioEntity> buscaUsuarioPor(String por) {

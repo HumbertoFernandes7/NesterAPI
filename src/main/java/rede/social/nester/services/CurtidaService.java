@@ -10,7 +10,7 @@ import rede.social.nester.entities.CurtidaEntity;
 import rede.social.nester.entities.PostagemEntity;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.exceptions.BadRequestBussinessException;
-import rede.social.nester.exceptions.NotFoundBussinessException;
+import rede.social.nester.exceptions.NotFoundBusinessException;
 import rede.social.nester.exceptions.UnauthorizedAccessBussinessException;
 import rede.social.nester.repositories.CurtidaRepository;
 
@@ -42,7 +42,7 @@ public class CurtidaService {
 
 	public CurtidaEntity buscaCurtidaPorID(Long id) {
 		return curtidaRepository.findById(id)
-				.orElseThrow(() -> new NotFoundBussinessException("Curtida não encontrada pelo id " + id));
+				.orElseThrow(() -> new NotFoundBusinessException("Curtida não encontrada pelo id " + id));
 	}
 
 	public CurtidaEntity buscaCurtidaPelaPostagemAndUsuario(PostagemEntity postagemEncontrada,
@@ -52,7 +52,7 @@ public class CurtidaService {
 		if (curtidaEncontrada != null) {
 			return curtidaEncontrada;
 		} else {
-			throw new NotFoundBussinessException(
+			throw new NotFoundBusinessException(
 					"Curtida não encontrada pelo usuario na postagem com id: " + postagemEncontrada.getId());
 		}
 	}

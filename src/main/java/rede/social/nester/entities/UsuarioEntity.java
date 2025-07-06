@@ -66,6 +66,9 @@ public class UsuarioEntity implements UserDetails {
 
 	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CurtidaEntity> curtidas;
+	
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ComentarioEntity> comentarios;
 
 	@Column(name = "dadosCompletos", length = 500)
 	private String dadosCompletos;

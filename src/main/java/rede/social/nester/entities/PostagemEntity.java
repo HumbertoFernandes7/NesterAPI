@@ -41,5 +41,8 @@ public class PostagemEntity {
 	@JoinColumn(name = "usuario_id")
 	@JsonBackReference
 	private UsuarioEntity usuario;
+	
+	@OneToMany(mappedBy = "postagem", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ComentarioEntity> comentarios;
 
 }

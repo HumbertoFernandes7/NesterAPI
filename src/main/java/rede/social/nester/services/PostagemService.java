@@ -14,7 +14,7 @@ import rede.social.nester.entities.PostagemEntity;
 import rede.social.nester.entities.SeguidorEntity;
 import rede.social.nester.entities.UsuarioEntity;
 import rede.social.nester.enuns.UsuarioEnum;
-import rede.social.nester.exceptions.NotFoundBussinessException;
+import rede.social.nester.exceptions.NotFoundBusinessException;
 import rede.social.nester.exceptions.UnauthorizedAccessBussinessException;
 import rede.social.nester.repositories.PostagemRepository;
 
@@ -39,7 +39,7 @@ public class PostagemService {
 
 	public PostagemEntity buscaPostagemPeloId(Long id) {
 		return postagemRepository.findById(id)
-				.orElseThrow(() -> new NotFoundBussinessException("Postagem não encontrada"));
+				.orElseThrow(() -> new NotFoundBusinessException("Postagem não encontrada"));
 	}
 
 	@Transactional

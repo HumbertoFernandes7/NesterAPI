@@ -4,9 +4,11 @@ import java.net.http.HttpHeaders;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,58 +17,63 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import rede.social.nester.exceptions.BadRequestBussinessException;
-import rede.social.nester.exceptions.NotFoundBussinessException;
+import rede.social.nester.exceptions.NotFoundBusinessException;
 import rede.social.nester.exceptions.UnauthorizedAccessBussinessException;
 
 @ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(BadRequestBussinessException.class)
-	public final ResponseEntity<ProblemExceptionOutput> handlerBadRequestBussinessException(
-			BadRequestBussinessException ex, WebRequest request) {
-		ProblemExceptionOutput problema = new ProblemExceptionOutput(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
-		return new ResponseEntity<ProblemExceptionOutput>(problema, HttpStatus.BAD_REQUEST);
-	}
+	private static final Logger logger = LoggerFactory.getLogger(CustomizedResponseEntityExceptionHandler.class);
 
-	@ExceptionHandler(NotFoundBussinessException.class)
-	public final ResponseEntity<ProblemExceptionOutput> handlerNotFoundBussinessException(NotFoundBussinessException ex,
-			WebRequest request) {
-		ProblemExceptionOutput problema = new ProblemExceptionOutput(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-		return new ResponseEntity<ProblemExceptionOutput>(problema, HttpStatus.NOT_FOUND);
-	}
+    @ExceptionHandler(BadRequestBussinessException.class)
+    public final ResponseEntity<ProblemExceptionOutput> handlerBadRequestBussinessException(
+            BadRequestBussinessException ex, WebRequest request) {
+        ProblemExceptionOutput problema = new ProblemExceptionOutput(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return new ResponseEntity<ProblemExceptionOutput>(problema, HttpStatus.BAD_REQUEST);
+    }
 
-	@ExceptionHandler(UnauthorizedAccessBussinessException.class)
-	public final ResponseEntity<ProblemExceptionOutput> handlerNotFoundBussinessException(
-			UnauthorizedAccessBussinessException ex, WebRequest request) {
-		ProblemExceptionOutput problema = new ProblemExceptionOutput(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
-		return new ResponseEntity<ProblemExceptionOutput>(problema, HttpStatus.UNAUTHORIZED);
-	}
+    @ExceptionHandler(NotFoundBusinessException.class)
+    public final ResponseEntity<ProblemExceptionOutput> handlerNotFoundBussinessException(NotFoundBusinessException ex, WebRequest request) {
+        ProblemExceptionOutput problema = new ProblemExceptionOutput(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return new ResponseEntity<ProblemExceptionOutput>(problema, HttpStatus.NOT_FOUND);
+    }
 
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+    @ExceptionHandler(UnauthorizedAccessBussinessException.class)
+    public final ResponseEntity<ProblemExceptionOutput> handlerNotFoundBussinessException(
+            UnauthorizedAccessBussinessException ex, WebRequest request) {
+        ProblemExceptionOutput problema = new ProblemExceptionOutput(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
+        return new ResponseEntity<ProblemExceptionOutput>(problema, HttpStatus.UNAUTHORIZED);
+    }
 
-		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
-		BindingResult bindingResult = ex.getBindingResult();
+        List<FieldsExceptionOutput> campos = ex.getBindingResult().getAllErrors().stream()
+                .map(error -> {
+                    String fieldName = (error instanceof FieldError) ? ((FieldError) error).getField() : error.getObjectName();
+                    return FieldsExceptionOutput.builder()
+                            .name(fieldName)
+                            .message(error.getDefaultMessage())
+                            .build();
+                })
+                .collect(Collectors.toList());
 
-		List<FieldsExceptionOutput> problemObjects = bindingResult.getAllErrors().stream().map(objectError -> {
+        ProblemExceptionOutput problema = new ProblemExceptionOutput(
+                HttpStatus.BAD_REQUEST.value(),
+                "Erro de validação. Verifique os campos informados.",
+                campos
+        );
+        return new ResponseEntity<>(problema, HttpStatus.BAD_REQUEST);
+    }
 
-			String message = objectError.getDefaultMessage();
-			String name = objectError.getObjectName();
+    @ExceptionHandler(Exception.class)
+    public final ResponseEntity<ProblemExceptionOutput> handleAllExceptions(Exception ex, WebRequest request) {
+         logger.error("Ocorreu um erro interno: " + ex.getMessage(), ex);
 
-			if (objectError instanceof FieldError) {
-				name = ((FieldError) objectError).getField();
-			}
-
-			message = message.replace("{1}", name);
-
-			return FieldsExceptionOutput.builder().name(name).message(message).build();
-		}).collect(Collectors.toList());
-
-		ProblemExceptionOutput problema = new ProblemExceptionOutput(HttpStatus.BAD_REQUEST.value(), detail,
-				problemObjects);
-
-		return new ResponseEntity<Object>(problema, HttpStatus.BAD_REQUEST);
-
-	}
+        ProblemExceptionOutput problema = new ProblemExceptionOutput(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Ocorreu um erro interno no servidor. Tente novamente mais tarde."
+        );
+        return new ResponseEntity<ProblemExceptionOutput>(problema, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
