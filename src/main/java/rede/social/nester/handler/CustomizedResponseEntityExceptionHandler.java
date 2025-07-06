@@ -4,8 +4,6 @@ import java.net.http.HttpHeaders;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +20,6 @@ import rede.social.nester.exceptions.UnauthorizedAccessBussinessException;
 
 @ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-
-	private static final Logger logger = LoggerFactory.getLogger(CustomizedResponseEntityExceptionHandler.class);
 
     @ExceptionHandler(BadRequestBussinessException.class)
     public final ResponseEntity<ProblemExceptionOutput> handlerBadRequestBussinessException(
@@ -65,15 +61,5 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         );
         return new ResponseEntity<>(problema, HttpStatus.BAD_REQUEST);
     }
-
-    @ExceptionHandler(Exception.class)
-    public final ResponseEntity<ProblemExceptionOutput> handleAllExceptions(Exception ex, WebRequest request) {
-         logger.error("Ocorreu um erro interno: " + ex.getMessage(), ex);
-
-        ProblemExceptionOutput problema = new ProblemExceptionOutput(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Ocorreu um erro interno no servidor. Tente novamente mais tarde."
-        );
-        return new ResponseEntity<ProblemExceptionOutput>(problema, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    
 }
