@@ -91,18 +91,24 @@ public class UsuarioService {
 	}
 
 	public byte[] buscarFotoUsuario(UsuarioEntity usuarioEncontrado) {
-	    String nomeFoto = usuarioEncontrado.getNomeFotoPerfil();
-	    Path caminhoFoto = Paths.get(caminhoFotos + nomeFoto);
-	    if (!Files.exists(caminhoFoto) || !Files.isRegularFile(caminhoFoto)) {
-	        System.err.println("ERRO FOTO: Foto não encontrada no caminho: " + caminhoFoto.toAbsolutePath());
-	        throw new BadRequestBussinessException("Foto não encontrada");
-	    }
-	    try {
-	        return Files.readAllBytes(caminhoFoto);
-	    } catch (IOException e) {
-	        System.err.println("ERRO FOTO: Erro ao ler foto do caminho " + caminhoFoto.toAbsolutePath() + ": " + e.getMessage());
-	        throw new BadRequestBussinessException("Erro ao ler foto: " + e);
-	    }
+		String nomeFoto = usuarioEncontrado.getNomeFotoPerfil();
+		Path caminhoFoto = Paths.get(caminhoFotos + nomeFoto);
+
+		if (!Files.exists(caminhoFoto) || !Files.isRegularFile(caminhoFoto)) {
+			Path caminhoFotoPadrao = Paths.get(caminhoFotos + "padrao.jpg");
+
+			try {
+				return Files.readAllBytes(caminhoFotoPadrao);
+			} catch (IOException e) {
+				throw new BadRequestBussinessException("Erro ao ler foto: " + e);
+			}
+		}
+		try {
+			return Files.readAllBytes(caminhoFoto);
+		} catch (IOException e) {
+			// Lança uma exceção se a foto do usuário não puder ser lida por outro motivo
+			throw new BadRequestBussinessException("Erro ao ler foto do usuário: " + e.getMessage());
+		}
 	}
 
 	@Transactional
@@ -153,7 +159,7 @@ public class UsuarioService {
 
 		return usuarios.stream().limit(4).collect(Collectors.toList());
 	}
-	
+
 	public Map<String, Integer> buscarQuantidadeSeguidoresESeguidos(UsuarioEntity usuarioEncontrado) {
 		Map<String, Integer> resultado = new HashMap<>();
 		List<SeguidorEntity> following = followService.listarFollowing(usuarioEncontrado);
