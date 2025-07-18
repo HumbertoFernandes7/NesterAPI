@@ -91,16 +91,27 @@ public class UsuarioService {
 	}
 
 	public byte[] buscarFotoUsuario(UsuarioEntity usuarioEncontrado) {
-		Path caminhoFoto = Paths.get(caminhoFotos + usuarioEncontrado.getNomeFotoPerfil());
-		if (!Files.exists(caminhoFoto) || !Files.isRegularFile(caminhoFoto)) {
-			throw new BadRequestBussinessException("Foto não encontrada");
-		}
-		try {
-			return Files.readAllBytes(caminhoFoto);
+	    String nomeFoto = usuarioEncontrado.getNomeFotoPerfil();
+	    Path caminhoFoto = Paths.get(caminhoFotos + nomeFoto);
 
-		} catch (IOException e) {
-			throw new BadRequestBussinessException("Erro ao ler foto: " + e);
-		}
+	    // --- INÍCIO DOS LOGS DE DEPURACÃO (NÃO REMOVER!) ---
+	    System.out.println("DEBUG FOTO: Tentando buscar foto: " + nomeFoto);
+	    System.out.println("DEBUG FOTO: Caminho configurado em app.foto.perfil.caminho: " + caminhoFotos);
+	    System.out.println("DEBUG FOTO: Caminho completo que está sendo verificado: " + caminhoFoto.toAbsolutePath());
+	    System.out.println("DEBUG FOTO: Files.exists()? " + Files.exists(caminhoFoto));
+	    System.out.println("DEBUG FOTO: Files.isRegularFile()? " + Files.isRegularFile(caminhoFoto));
+	    // --- FIM DOS LOGS DE DEPURACÃO ---
+
+	    if (!Files.exists(caminhoFoto) || !Files.isRegularFile(caminhoFoto)) {
+	        System.err.println("ERRO FOTO: Foto não encontrada no caminho: " + caminhoFoto.toAbsolutePath());
+	        throw new BadRequestBussinessException("Foto não encontrada");
+	    }
+	    try {
+	        return Files.readAllBytes(caminhoFoto);
+	    } catch (IOException e) {
+	        System.err.println("ERRO FOTO: Erro ao ler foto do caminho " + caminhoFoto.toAbsolutePath() + ": " + e.getMessage());
+	        throw new BadRequestBussinessException("Erro ao ler foto: " + e);
+	    }
 	}
 
 	@Transactional
