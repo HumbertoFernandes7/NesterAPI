@@ -22,6 +22,7 @@ public class ExecutaAposInicioDaAplicacao implements ApplicationRunner {
 		UsuarioEntity usuario = new UsuarioEntity();
 		usuario.setNome("Humberto Fernandes");
 		usuario.setEmail("humbertofernandes08@hotmail.com");
+		usuario.setNomeFotoPerfil("humbertofernandes08@hotmail.comfoto-perfil.jpg");
 		usuario.setDataNascimento(LocalDate.of(2002, 8, 27));
 		usuario.setRole(UsuarioEnum.ADMIN);
 		usuario.setSenha("123456789");
@@ -30,6 +31,7 @@ public class ExecutaAposInicioDaAplicacao implements ApplicationRunner {
 		UsuarioEntity usuario2 = new UsuarioEntity();
 		usuario2.setNome("Vinicius de Santana");
 		usuario2.setEmail("vnsrodrigues10@gmail.com");
+		usuario2.setNomeFotoPerfil("padrao.jpg");
 		usuario2.setDataNascimento(LocalDate.of(2001, 6, 16));
 		usuario2.setRole(UsuarioEnum.ADMIN);
 		usuario2.setSenha("123456789");

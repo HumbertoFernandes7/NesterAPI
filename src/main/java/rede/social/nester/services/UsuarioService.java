@@ -125,7 +125,6 @@ public class UsuarioService {
 	@Transactional
 	public void criarUsuarioAdminAoIniciarAplicacao(UsuarioEntity usuario) {
 		if (verificaEmailExistente(usuario.getEmail())) {
-			usuario.setNomeFotoPerfil("padrao.jpg");
 			usuario.setSenha(criptografarSenha(usuario.getSenha()));
 			usuarioRepository.save(usuario);
 		}
