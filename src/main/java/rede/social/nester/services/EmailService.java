@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityManager;
@@ -34,8 +35,8 @@ public class EmailService {
 	private EntityManager manager;
 
 	@Transactional
+	@Async
 	public void enviarEmailResetSenha(UsuarioEntity usuario) {
-
 		try {
 			SenhaResetHashEntity existente = senhaResetHashRepository.findByUsuario(usuario);
 			String hashParaEnviar;
@@ -68,7 +69,7 @@ public class EmailService {
 		}
 	}
 
-	public void enviarEmail(String destino, String assunto, String texto) {
+	private void enviarEmail(String destino, String assunto, String texto) {
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setTo(destino);
 		msg.setSubject(assunto);
