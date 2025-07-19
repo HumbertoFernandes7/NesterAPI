@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class UsuarioInput {
 	private String nome;
 
 	@NotNull(message = "Data nascimento não pode ser nulo")
+	@PastOrPresent(message = "Data de nascimento não pode ser uma data futura")
 	private LocalDate dataNascimento;
 
 	@Email(message = "Email invalido!")
