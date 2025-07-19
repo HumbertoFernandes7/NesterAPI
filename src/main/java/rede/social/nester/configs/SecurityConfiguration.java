@@ -38,10 +38,13 @@ public class SecurityConfiguration {
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		return httpSecurity.cors(withDefaults()).csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/auth/login")
-						.permitAll().requestMatchers(HttpMethod.POST, "/usuarios/cadastrar", "usuarios/enviar-email")
-						.permitAll().requestMatchers(HttpMethod.PUT, "/usuarios/recuperar-senha/**").permitAll()
-						.anyRequest().hasAnyRole("USER", "ADMIN"))
+				.authorizeHttpRequests(authorize -> authorize
+						.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+						.requestMatchers(HttpMethod.POST, "/usuarios/cadastrar", "usuarios/enviar-email").permitAll()
+						.requestMatchers(HttpMethod.GET, "/status").permitAll()
+						.requestMatchers(HttpMethod.PUT, "/usuarios/recuperar-senha/**").permitAll()
+						.anyRequest()
+						.hasAnyRole("USER", "ADMIN"))
 				.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
 	}
 
