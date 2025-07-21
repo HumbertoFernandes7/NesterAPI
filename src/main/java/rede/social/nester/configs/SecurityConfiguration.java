@@ -42,6 +42,7 @@ public class SecurityConfiguration {
 						.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
 						.requestMatchers(HttpMethod.POST, "/usuarios/cadastrar", "usuarios/enviar-email").permitAll()
 						.requestMatchers(HttpMethod.GET, "/status").permitAll()
+						.requestMatchers(HttpMethod.HEAD, "/status").permitAll()
 						.requestMatchers(HttpMethod.PUT, "/usuarios/recuperar-senha/**").permitAll()
 						.anyRequest()
 						.hasAnyRole("USER", "ADMIN"))
